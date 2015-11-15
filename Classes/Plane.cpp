@@ -55,5 +55,5 @@ void DefaultPlane::addEvents() {
 void DefaultPlane::touchEvent(cocos2d::Touch* touch)
 {
     CCLOG("Sprite touched");
-    CCLOG("HP = %d", this->plane_hp);
+    CCLOG("Health = %d", this->plane_hp);
 }
