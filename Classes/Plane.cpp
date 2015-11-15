@@ -1,13 +1,15 @@
-#include "FlightX_Plane.h"
+#include "Plane.h"
 using namespace cocos2d;
 
-MySprite::MySprite() {}
+DefaultPlane::DefaultPlane() {
+    plane_hp = 100;
+}
 
-MySprite::~MySprite() {}
+DefaultPlane::~DefaultPlane() {}
 
-MySprite* MySprite::create()
+DefaultPlane* DefaultPlane::create()
 {
-    MySprite* pSprite = new MySprite();
+    DefaultPlane* pSprite = new DefaultPlane();
     
     if (pSprite->initWithFile("DefaultPlane.png"))
     {
@@ -24,38 +26,34 @@ MySprite* MySprite::create()
     return NULL;
 }
 
-void MySprite::initOptions()
-{
+void DefaultPlane::initOptions() {
 //     do things here like setTag(), setPosition(), any custom logic.
 }
-//
-void MySprite::addEvents()
-{
+
+void DefaultPlane::addEvents() {
     auto listener = cocos2d::EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
     
-    listener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event)
-    {
+    listener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event) {
         cocos2d::Vec2 p = touch->getLocation();
         cocos2d::Rect rect = this->getBoundingBox();
         
-        if(rect.containsPoint(p))
-        {
+        if(rect.containsPoint(p)) {
             return true; // to indicate that we have consumed it.
         }
         
         return false; // we did not consume this event, pass thru.
     };
     
-    listener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event)
-    {
+    listener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event) {
         touchEvent(touch);
     };
     
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);
 }
 
-void MySprite::touchEvent(cocos2d::Touch* touch)
+void DefaultPlane::touchEvent(cocos2d::Touch* touch)
 {
     CCLOG("Sprite touched");
+    CCLOG("HP = %d", this->plane_hp);
 }

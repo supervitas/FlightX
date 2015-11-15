@@ -1,14 +1,10 @@
 #include "cocos2d.h"
 USING_NS_CC;
-
-
-
-class MySprite : public cocos2d::Sprite
-{
+class DefaultPlane : public cocos2d::Sprite {
 public:
-    MySprite();
-    ~MySprite();
-    static MySprite* create();
+    DefaultPlane();
+    ~DefaultPlane();
+    static DefaultPlane* create();
     
     void initOptions();
     
@@ -16,5 +12,7 @@ public:
     void touchEvent(cocos2d::Touch* touch);
     
 private:
+    int plane_hp;
+    bool isEnemy;
     
 };
