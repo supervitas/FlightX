@@ -30,37 +30,19 @@ bool HelloWorld::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
-    
-
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-//     add a "close" icon to exit the progress. it's an autorelease object
-//    auto closeItem = MenuItemImage::create(
-//                                           "CloseNormal.png",
-//                                           "CloseSelected.png",
-//                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-//    
-//	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-//                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-//    auto menu = M enu::create(closeItem, NULL);
-//    menu->setPosition(Vec2::ZERO);
-//    this->addChild(menu, 1);
-
-    
-
-    auto back = Sprite::create("background.jpg");
+    auto back = Sprite::create("menuback.jpg");
     back->setPosition(Vec2(visibleSize.width/2
                            , visibleSize.height/2));
     this->addChild(back, 0);
-    back->setScale(0.7);
-
+    back->setScale(1.2);
+    auto gameLabel = Label::createWithTTF("fonts/arial.ttf", "FlightX");
+    gameLabel->setColor(Color3B(255, 0 , 0));
+    gameLabel->setPosition(Vec2(origin.x + visibleSize.width/2,
+                                origin.y + visibleSize.height/2 + 30));
+    this->addChild(gameLabel,1);
     auto startGameButton = ui::Button::create();
-    startGameButton->setTitleText("Start!");
-    startGameButton->setColor(Color3B(255, 200, 220));
+    startGameButton->setTitleText("Play");
+    startGameButton->setColor(Color3B(0, 255, 0));
     
     startGameButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type){
         switch (type) {

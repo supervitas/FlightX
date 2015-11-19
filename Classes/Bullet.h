@@ -7,7 +7,7 @@ USING_NS_CC;
 class Bullet : public cocos2d::Sprite {
 public:
 
-	static Bullet* create(static Vec2 position, static bool isEnemyBullet = false, static unsigned int bulletType = 0);
+    static Bullet* create(Vec2 position,  bool isEnemyBullet = false,  unsigned int *bulletType = 0);
 	void update(float delta) override;
 
     void touchEvent(cocos2d::Touch* touch);
@@ -17,7 +17,7 @@ private:
 	Bullet();
 	~Bullet();
 
-	void initOptions(static Vec2 position, static bool isEnemyBullet = false, static unsigned int bulletType = 0);
+	void initOptions( Vec2 position, bool isEnemyBullet = false, unsigned int *bulletType = 0);
 	void addEvents();
 	void applySpeed(float deltaTime);
 	bool isStillOnScreen();

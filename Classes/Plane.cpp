@@ -11,7 +11,7 @@ DefaultPlane* DefaultPlane::create()
 {
     DefaultPlane* pSprite = new DefaultPlane();
     
-    if (pSprite->initWithFile("DefaultPlane.png"))
+    if (pSprite->initWithFile("plane.png"))
     {
         pSprite->autorelease();
         

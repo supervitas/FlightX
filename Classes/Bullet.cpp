@@ -16,11 +16,11 @@ Bullet::~Bullet()
 	//CCLOG("Bullet destroyed!");
 }
 
-Bullet* Bullet::create(static Vec2 position, static bool isEnemyBullet, static unsigned int bulletType)
+Bullet*  Bullet::create(Vec2 position,  bool isEnemyBullet,  unsigned int *bulletType)
 {
 	Bullet* bullet = new Bullet();
     
-	if (bullet->initWithFile("DefaultPlane.png"))	// Ha-ha! Plane shoot bullets that looks like planes!
+	if (bullet->initWithFile("bullet.png"))	// Ha-ha! Plane shoot bullets that looks like planes!
     {
 		bullet->autorelease();
 		bullet->initOptions(position, isEnemyBullet, bulletType);
@@ -75,7 +75,7 @@ void Bullet::update(float delta)
 }
 
 // Probably we should pass SimplePlane instance here to get all the values: plane type, isEnemy bool and initial rotation...
-void Bullet::initOptions(static Vec2 position, static bool isEnemyBullet, static unsigned int bulletType)
+void Bullet::initOptions( Vec2 position,  bool isEnemyBullet, unsigned int *bulletType)
 {
 	// What about an offset?
 	setPosition(position);
@@ -84,7 +84,7 @@ void Bullet::initOptions(static Vec2 position, static bool isEnemyBullet, static
 
 	_isEnemyBullet = isEnemyBullet;
 	_isEnemyBullet ? this->setColor(ccc3(255, 0, 0)) : this->setColor(ccc3(0, 255, 0));
-	setScale(0.5f);
+	setScale(0.2f);
 
 	_currentSpeed = Vec2(0.0f, 1.0f).getNormalized() * kMaximumBulletSpeed;	// Think how to get Plane's position and set initial rotation.
 }
