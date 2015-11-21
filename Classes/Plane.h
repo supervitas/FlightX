@@ -1,3 +1,5 @@
+#ifndef __PLANE_H__
+#define __PLANE_H__
 #include "cocos2d.h"
 USING_NS_CC;
 class DefaultPlane : public cocos2d::Sprite {
@@ -6,6 +8,7 @@ public:
     ~DefaultPlane();
     static DefaultPlane* create();
     
+	bool IsEnemy() const;
 	void ApplyDamage(const int damage);
 	bool MovePlane(const Vec2 direction);
 	Vec2 GetCurrentSpeed();
@@ -30,3 +33,5 @@ private:
 	Vec2 _movementDirection;
     
 };
+
+#endif

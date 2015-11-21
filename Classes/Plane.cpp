@@ -54,6 +54,11 @@ void DefaultPlane::ApplyDamage(const int damage)
 		unscheduleUpdateAndDelete();
 }
 
+bool DefaultPlane::IsEnemy() const
+{
+	return _isEnemy;
+}
+
 void DefaultPlane::unscheduleUpdateAndDelete()
 {
 	// Obviously, we don't want all update() functions called after object was destroyed.
@@ -69,11 +74,11 @@ Vec2 DefaultPlane::GetCurrentSpeed()
 void DefaultPlane::applySpeed(float deltaTime)
 {
 	auto currentPosition = getPosition();
-	currentPosition += _movementDirection * deltaTime;
+	currentPosition += GetCurrentSpeed() * deltaTime;
 
 	// There may be some more complex logic.
 	auto screen = this->getParent()->getBoundingBox();
-	if (screen.containsPoint(getPosition()))
+	if (screen.containsPoint(currentPosition))
 		setPosition(currentPosition);
 }
 
@@ -109,11 +114,13 @@ void DefaultPlane::addEvents() {
     };
     
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);
+
+	scheduleUpdate();
 }
 
 void DefaultPlane::touchEvent(cocos2d::Touch* touch)
 {
-    CCLOG("Sprite touched");
+	setRotation(getRotation() + 15);
     CCLOG("Health = %d", _currentHP);
 	CCLOG("Rotation = %f", getRotation());
 

@@ -1,28 +1,32 @@
 #ifndef __BULLET_H__
 #define __BULLET_H__
 
+#include "Plane.h"
 #include "cocos2d.h"
 USING_NS_CC;
 
 class Bullet : public cocos2d::Sprite {
 public:
 
-    static Bullet* create(Vec2 position,  bool isEnemyBullet = false,  unsigned int *bulletType = 0);
+    static Bullet* create(const DefaultPlane *plane);
 	void update(float delta) override;
-
     void touchEvent(cocos2d::Touch* touch);
+
+	float GetRotation() const;
     
 private:
 
 	Bullet();
 	~Bullet();
 
-	void initOptions( Vec2 position, bool isEnemyBullet = false, unsigned int *bulletType = 0);
+	void initOptions(const DefaultPlane *plane);
 	void addEvents();
 	void applySpeed(float deltaTime);
 	bool isStillOnScreen();
 	void unscheduleUpdateAndDelete();
 
+private:
+	int _damadge;
     bool _isEnemyBullet; // Much better than owner_id. :)
 	float _max_speed;
 	Vec2 _currentSpeed;

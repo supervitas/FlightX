@@ -1,9 +1,14 @@
 #include "Bullet.h"
+#include "math.h"
 USING_NS_CC;
 
 namespace
 {
 	static float kMaximumBulletSpeed = 200.0f;
+	float DegreesToRadians(float degrees)
+	{
+		return degrees * (M_PI / 180);
+	}
 };
 
 Bullet::Bullet() 
@@ -16,24 +21,28 @@ Bullet::~Bullet()
 	//CCLOG("Bullet destroyed!");
 }
 
-Bullet*  Bullet::create(Vec2 position,  bool isEnemyBullet,  unsigned int *bulletType)
+Bullet*  Bullet::create(const DefaultPlane *plane)
 {
 	Bullet* bullet = new Bullet();
     
 	if (bullet->initWithFile("bullet.png"))	// Ha-ha! Plane shoot bullets that looks like planes!
     {
 		bullet->autorelease();
-		bullet->initOptions(position, isEnemyBullet, bulletType);
+		bullet->initOptions(plane);
 		bullet->addEvents();
         
 		// Should be called after all work is done.
-		bullet->scheduleUpdate();
 		return bullet;
     }
     
 	CC_SAFE_DELETE(bullet);
     return NULL;
 
+}
+
+float Bullet::GetRotation() const
+{
+	return _currentSpeed.getAngle();
 }
 
 void Bullet::unscheduleUpdateAndDelete()
@@ -75,18 +84,19 @@ void Bullet::update(float delta)
 }
 
 // Probably we should pass SimplePlane instance here to get all the values: plane type, isEnemy bool and initial rotation...
-void Bullet::initOptions( Vec2 position,  bool isEnemyBullet, unsigned int *bulletType)
+void Bullet::initOptions(const DefaultPlane *plane)
 {
 	// What about an offset?
-	setPosition(position);
+	setPosition(plane->getPosition());
 
 	_max_speed = kMaximumBulletSpeed;	// Should depend on bullet type.
 
-	_isEnemyBullet = isEnemyBullet;
+	_isEnemyBullet = plane->IsEnemy();
 	_isEnemyBullet ? this->setColor(ccc3(255, 0, 0)) : this->setColor(ccc3(0, 255, 0));
 	setScale(0.2f);
 
-	_currentSpeed = Vec2(0.0f, 1.0f).getNormalized() * kMaximumBulletSpeed;	// Think how to get Plane's position and set initial rotation.
+	// I hate Maths.
+	_currentSpeed = Vec2(-1.0f, 0.0f).rotateByAngle(Vec2(), -DegreesToRadians(plane->getRotation() + 90)).getNormalized() * kMaximumBulletSpeed;
 }
 
 // Some undescribable horror.
@@ -111,6 +121,8 @@ void Bullet::addEvents()
     };
     
     cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);
+
+	scheduleUpdate();
 
 }
 
