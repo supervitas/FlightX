@@ -6,13 +6,27 @@ public:
     ~DefaultPlane();
     static DefaultPlane* create();
     
+	void ApplyDamage(const int damage);
+	bool MovePlane(const Vec2 direction);
+	Vec2 GetCurrentSpeed();
+
+	void update(float delta) override;
+	
+	
+private:
     void initOptions();
-    
     void addEvents();
     void touchEvent(cocos2d::Touch* touch);
+	
+	void skewOnMovement();
+	void applySpeed(float deltaTime);
+	void unscheduleUpdateAndDelete();
     
 private:
-    int plane_hp;
-    bool isEnemy;
+    int _currentHP;
+	int _baseHP;
+    bool _isEnemy;
+	float _maximalSpeed;
+	Vec2 _movementDirection;
     
 };

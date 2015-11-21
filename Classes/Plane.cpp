@@ -1,11 +1,22 @@
 #include "Plane.h"
-using namespace cocos2d;
+USING_NS_CC;
 
-DefaultPlane::DefaultPlane() {
-    plane_hp = 100;
+namespace
+{
+	const int kDefaultPlaneHP = 100;
+	const bool kDefaultPlaneOwnerFlag = false;
+	const float kDefaultPlaneMaxSpeed = 100.0f;
 }
 
-DefaultPlane::~DefaultPlane() {}
+DefaultPlane::DefaultPlane() 
+{
+	
+}
+
+DefaultPlane::~DefaultPlane() 
+{
+	
+}
 
 DefaultPlane* DefaultPlane::create()
 {
@@ -26,9 +37,57 @@ DefaultPlane* DefaultPlane::create()
     return NULL;
 }
 
-void DefaultPlane::initOptions() {
-//     do things here like setTag(), setPosition(), any custom logic.
+void DefaultPlane::initOptions() 
+{
+	_isEnemy = kDefaultPlaneOwnerFlag;
+	_baseHP = kDefaultPlaneHP;
+	_currentHP = _baseHP;
+	_maximalSpeed = kDefaultPlaneMaxSpeed;
+	_movementDirection = Vec2();
 }
+
+void DefaultPlane::ApplyDamage(const int damage)
+{
+	_currentHP -= damage;
+	//Play animation.
+	if (_currentHP <= 0)
+		unscheduleUpdateAndDelete();
+}
+
+void DefaultPlane::unscheduleUpdateAndDelete()
+{
+	// Obviously, we don't want all update() functions called after object was destroyed.
+	this->unscheduleUpdate();
+	removeFromParentAndCleanup(true);
+}
+
+Vec2 DefaultPlane::GetCurrentSpeed()
+{
+	return _movementDirection * _maximalSpeed;
+}
+
+void DefaultPlane::applySpeed(float deltaTime)
+{
+	auto currentPosition = getPosition();
+	currentPosition += _movementDirection * deltaTime;
+
+	// There may be some more complex logic.
+	auto screen = this->getParent()->getBoundingBox();
+	if (screen.containsPoint(getPosition()))
+		setPosition(currentPosition);
+}
+
+bool DefaultPlane::MovePlane(const Vec2 direction)
+{
+	_movementDirection += direction;
+	return true;
+}
+
+void DefaultPlane::update(float delta)
+{
+	applySpeed(delta);
+}
+
 
 void DefaultPlane::addEvents() {
     auto listener = cocos2d::EventListenerTouchOneByOne::create();
@@ -55,5 +114,7 @@ void DefaultPlane::addEvents() {
 void DefaultPlane::touchEvent(cocos2d::Touch* touch)
 {
     CCLOG("Sprite touched");
-    CCLOG("Health = %d", this->plane_hp);
+    CCLOG("Health = %d", _currentHP);
+	CCLOG("Rotation = %f", getRotation());
+
 }

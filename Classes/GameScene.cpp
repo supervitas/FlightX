@@ -25,21 +25,22 @@ bool GameScene::init() {
     plane->setScale(0.15);
 	plane->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 8));
 	this->addChild(plane, 1);
+	plane->setRotation(60);
 
 
 
 
 	auto listener = EventListenerKeyboard::create();
-	listener->onKeyPressed = [=](EventKeyboard::KeyCode code, cocos2d::Event * event) {
+	listener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, cocos2d::Event * event) {
         Bullet *bullet;
-		switch (code) {
+		switch (keyCode) {
 		case cocos2d::EventKeyboard::KeyCode::KEY_NONE:
 			break;
         case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-			plane->setPositionX(plane->getPositionX() - 10.0f);
+			plane->MovePlane(Vec2(-1.0f,.0f));
 			break;
 		case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-			plane->setPositionX(plane->getPositionX() + 10.0f);
+			plane->MovePlane(Vec2(1.0f, .0f));
 			break;
         
 		case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
@@ -51,6 +52,7 @@ bool GameScene::init() {
         case cocos2d::EventKeyboard::KeyCode::KEY_SPACE:
             bullet = Bullet::create(plane->getPosition(), true);
 			this->addChild(bullet, 1);
+			CCLOG("Bullet Rotation = %f", bullet->getRotation());
 			break;
         default:
 			break;
@@ -58,7 +60,16 @@ bool GameScene::init() {
 	};
     listener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event){
 
-        CCLOG("lol");
+		switch (keyCode) {
+		case cocos2d::EventKeyboard::KeyCode::KEY_NONE:
+			break;
+		case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+			plane->MovePlane(Vec2(1.0f, .0f));
+			break;
+		case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+			plane->MovePlane(Vec2(-1.0f, .0f));
+			break;
+		};
     };
 
 	this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, plane);
