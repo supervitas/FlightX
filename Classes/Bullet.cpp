@@ -1,5 +1,6 @@
 #include "Bullet.h"
 #include "math.h"
+#include <iostream>
 USING_NS_CC;
 
 namespace
@@ -63,24 +64,23 @@ void Bullet::applySpeed(float deltaTime)
 
 bool Bullet::isStillOnScreen()
 {
+    
 	auto boundings = getParent()->getBoundingBox();
 	auto bulletWillLeaveScreenOnNextFrame = boundings.intersectsCircle(getPosition(), kMaximumBulletSpeed);
-	
-	// There may be some more complex logic.
+    
+    // There may be some more complex logic.
 	return bulletWillLeaveScreenOnNextFrame;
 }
 
 void Bullet::update(float delta)
 {
 	applySpeed(delta);
-
 	// If bullet is offscreen, destroy it.
 	if (!isStillOnScreen())
 		// There should not be any modifications to bullet beyond this point, otherwise you will probably try read 0xFEEEFF46.
 		// So, first update all the parameters, then check if bullets needs to be deleted. 
 		unscheduleUpdateAndDelete();
 	
-	//CCLOG("Bullet updated!");
 }
 
 // Probably we should pass SimplePlane instance here to get all the values: plane type, isEnemy bool and initial rotation...
@@ -92,7 +92,7 @@ void Bullet::initOptions(const DefaultPlane *plane)
 	_max_speed = kMaximumBulletSpeed;	// Should depend on bullet type.
 
 	_isEnemyBullet = plane->IsEnemy();
-	_isEnemyBullet ? this->setColor(ccc3(255, 0, 0)) : this->setColor(ccc3(0, 255, 0));
+	_isEnemyBullet ? this->setColor(Color3B(255, 0, 0)) : this->setColor(Color3B(0, 255, 0));
 	setScale(0.2f);
 
 	// I hate Maths.

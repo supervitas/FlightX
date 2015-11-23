@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "EnemyPlane.h"
 #include "Plane.h"
 #include "Bullet.h"
 
@@ -18,8 +19,10 @@ Scene* GameScene::createScene()
     return scene;
 }
 
-bool GameScene::init() {
-    if (!Layer::init()) {
+bool GameScene::init()
+{
+    if (!Layer::init())
+    {
         return false;	
     }
     
@@ -31,9 +34,10 @@ bool GameScene::init() {
     plane->setScale(0.15);
 	plane->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 8));
 	this->addChild(plane, kPlaneZIndex);
-	//plane->setRotation(60);
-
-
+    
+    EnemyPlane *enemy_plane = EnemyPlane::create();
+    this->addChild(enemy_plane, kPlaneZIndex);
+  
 	// Keyboard input
 	{
 		auto listener = EventListenerKeyboard::create();
@@ -57,8 +61,14 @@ bool GameScene::init() {
 			case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 				plane->MovePlane(Vec2(.0f, -1.0f));
 				break;
+            case cocos2d::EventKeyboard::KeyCode::KEY_K:
+                {
+                    bullet = Bullet::create(enemy_plane);
+                    this->addChild(bullet, kBulletZIndex);
+                    CCLOG("Bullet Rotation = %f", bullet->GetRotation()*(180.0f/3.14156));
+                }
+                break;
 
-				// Plane Shooting
 			case cocos2d::EventKeyboard::KeyCode::KEY_SPACE:
 				// Spawn Bullet
 			{

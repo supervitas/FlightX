@@ -14,6 +14,8 @@ USING_NS_CC;
 class EnemyPlane : public DefaultPlane
 {
 public:
+    EnemyPlane();
+    ~EnemyPlane();
     static EnemyPlane* create();
     void initOptions();
     void Spawn();

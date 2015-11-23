@@ -109,7 +109,7 @@ void DefaultPlane::addEvents() {
         return false; // we did not consume this event, pass thru.
     };
     
-    listener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event) {
+    listener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event){
         touchEvent(touch);
     };
     
@@ -122,6 +122,7 @@ void DefaultPlane::touchEvent(cocos2d::Touch* touch)
 {
 	setRotation(getRotation() + 15);
     CCLOG("Health = %d", _currentHP);
+    CCLOG("Enemy = %d",_isEnemy);
 	CCLOG("Rotation = %f", getRotation());
 
 }

@@ -8,7 +8,9 @@
 class GameScene : public cocos2d::Layer {
 public:
     static cocos2d::Scene* createScene();
+    void checkColision();
     virtual bool init();
+    
     CREATE_FUNC(GameScene);
 private:
 	void SetDefaulBackground();

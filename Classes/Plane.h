@@ -2,7 +2,8 @@
 #define __PLANE_H__
 #include "cocos2d.h"
 USING_NS_CC;
-class DefaultPlane : public cocos2d::Sprite {
+class DefaultPlane : public cocos2d::Sprite
+{
 public:
     DefaultPlane();
     ~DefaultPlane();
@@ -12,11 +13,9 @@ public:
 	void ApplyDamage(const int damage);
 	bool MovePlane(const Vec2 direction);
 	Vec2 GetCurrentSpeed();
-
+    
 	void update(float delta) override;
 	
-	
-private:
     void initOptions();
     void addEvents();
     void touchEvent(cocos2d::Touch* touch);
@@ -25,7 +24,7 @@ private:
 	void applySpeed(float deltaTime);
 	void unscheduleUpdateAndDelete();
     
-private:
+protected:
     int _currentHP;
 	int _baseHP;
     bool _isEnemy;

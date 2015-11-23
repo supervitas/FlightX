@@ -5,7 +5,8 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-class Bullet : public cocos2d::Sprite {
+class Bullet : public cocos2d::Sprite
+{
 public:
 
     static Bullet* create(const DefaultPlane *plane);
