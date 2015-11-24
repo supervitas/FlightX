@@ -47,11 +47,6 @@ bool GameScene::init()
 	this->addChild(plane);
     
     EnemyPlane *enemy_plane = EnemyPlane::create();
-    auto enemy_plane_body = PhysicsBody::createBox(enemy_plane->getContentSize(), PhysicsMaterial(0,1,0));
-    enemy_plane_body->setCollisionBitmask(2);
-    enemy_plane_body->setContactTestBitmask(true);
-    enemy_plane->setPhysicsBody(enemy_plane_body);
-
     this->addChild(enemy_plane);
     
     
@@ -140,7 +135,7 @@ bool GameScene::init()
 
 bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
     // Do something
-    CCLOG("123");
+
     PhysicsBody *a = contact.getShapeA()->getBody();
     PhysicsBody *b = contact.getShapeB()->getBody();
     if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask())) {

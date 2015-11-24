@@ -34,13 +34,18 @@ EnemyPlane*  EnemyPlane::create(){
 }
 
 
-void EnemyPlane::initOptions(){
-    this->_isEnemy = true;
-    this->_baseHP = 100;
-    this->_currentHP = _baseHP;
-    this->_maximalSpeed = 100.0f;
-    this->_movementDirection = Vec2();
+void EnemyPlane::initOptions()
+{
+    auto plane_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,1,0));
+    plane_body->setCollisionBitmask(1);
+    plane_body->setContactTestBitmask(true);
+    this->setPhysicsBody(plane_body);
     this->setScale(0.15);
+    _isEnemy = true;
+    _baseHP = 100;
+    _currentHP = _baseHP;
+    _maximalSpeed = 100.0f;
+    _movementDirection = Vec2();
     this->setRotation(180);
     this->setColor(Color3B(255,0,5));
     this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 1.2));
