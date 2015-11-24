@@ -37,7 +37,7 @@ EnemyPlane*  EnemyPlane::create(){
 void EnemyPlane::initOptions()
 {
     auto plane_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,1,0));
-    plane_body->setCollisionBitmask(1);
+    plane_body->setCollisionBitmask(2);
     plane_body->setContactTestBitmask(true);
     this->setPhysicsBody(plane_body);
     this->setScale(0.15);

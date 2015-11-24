@@ -9,12 +9,13 @@ namespace
 {
 	const int kPlaneZIndex = 1;
 	const int kBulletZIndex = 2;
+    Label *scoreLabel;
 };
 
 Scene* GameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();  // For physics
-    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_ALL );
+    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_ALL);
     // 'layer' is an autorelease object
     auto layer = GameScene::create();
     layer->setPhysicsWorld(scene->getPhysicsWorld());
@@ -39,7 +40,7 @@ bool GameScene::init()
     
     auto edgeBody = PhysicsBody::createEdgeBox( visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3 );
     auto edgeNode = Node::create();
-    edgeNode ->setPosition( Point( visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y ) );
+    edgeNode ->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y ) );
     edgeNode->setPhysicsBody( edgeBody );
     this->addChild( edgeNode );
 
@@ -92,7 +93,7 @@ bool GameScene::init()
 			{
 				bullet = Bullet::create(plane);
 				this->addChild(bullet, kBulletZIndex);
-				CCLOG("Bullet Rotation = %f", bullet->GetRotation()*(180.0f/3.14156));
+
 			}
 				break;
 			default:
@@ -127,20 +128,27 @@ bool GameScene::init()
 
 		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, plane);
 	}
-
+    
 	// Update everything in this scene.
 	this->scheduleUpdate();
     return true;
 }
 
 bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
-    // Do something
+
 
     PhysicsBody *a = contact.getShapeA()->getBody();
     PhysicsBody *b = contact.getShapeB()->getBody();
-    if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask())) {
-        
-        CCLOG("YES");
+    if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask()))
+    {
+        CCLOG("Planes Colission");
+    }
+    if((3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask())){
+        CCLOG("Bullet Colission");
+        score++;
+        scoreLabel->setString(std::to_string(score));
+
+//        b->getNode()->removeFromParent();
     }
     
     return true;
@@ -154,6 +162,19 @@ void GameScene::SetDefaulBackground()
 	auto back = Sprite::create("background.jpg");
 	back->setFlippedY(true);
 	back->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+    back->setScale(0.7);
 	this->addChild(back, 0);
-	back->setScale(0.7);
+    
+    auto gameLabel = Label::createWithTTF("fonts/arial.ttf", "Score:");
+    gameLabel->setColor(Color3B(255, 255 , 255));
+    gameLabel->setPosition(Vec2(origin.x + visibleSize.width - 40,
+                                origin.y + visibleSize.height - 10));
+    this->addChild(gameLabel);
+    
+    scoreLabel = Label::create();
+    scoreLabel->setString(std::to_string(score));
+    scoreLabel->setColor(Color3B(255, 0 , 0));
+    scoreLabel->setPosition(Vec2(origin.x + visibleSize.width-15,
+                                 origin.y + visibleSize.height-10));
+    this->addChild(scoreLabel, 0);
 }

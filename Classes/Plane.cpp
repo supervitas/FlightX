@@ -8,15 +8,9 @@ namespace
 	const float kDefaultPlaneMaxSpeed = 100.0f;
 }
 
-DefaultPlane::DefaultPlane() 
-{
-	
-}
+DefaultPlane::DefaultPlane() {}
 
-DefaultPlane::~DefaultPlane() 
-{
-	
-}
+DefaultPlane::~DefaultPlane() {}
 
 DefaultPlane* DefaultPlane::create()
 {

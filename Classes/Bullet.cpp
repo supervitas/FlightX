@@ -26,7 +26,7 @@ Bullet*  Bullet::create(const DefaultPlane *plane)
 {
 	Bullet* bullet = new Bullet();
     
-	if (bullet->initWithFile("bullet.png"))	// Ha-ha! Plane shoot bullets that looks like planes!
+	if (bullet->initWithFile("bullet.png"))
     {
 		bullet->autorelease();
 		bullet->initOptions(plane);
@@ -67,10 +67,6 @@ bool Bullet::isStillOnScreen()
     
 	auto boundings = getParent()->getBoundingBox();
 	auto bulletWillLeaveScreenOnNextFrame = boundings.intersectsCircle(getPosition(), 0);
-
-//    if (this->getParent()->) {
-    
-//    }
     
     // There may be some more complex logic.
 	return bulletWillLeaveScreenOnNextFrame;
@@ -90,15 +86,21 @@ void Bullet::update(float delta)
 // Probably we should pass SimplePlane instance here to get all the values: plane type, isEnemy bool and initial rotation...
 void Bullet::initOptions(const DefaultPlane *plane)
 {
-	// What about an offset?
+    auto bullet_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,1,0));
+    bullet_body->setCollisionBitmask(3);
+    bullet_body->setContactTestBitmask(true);
+    this->setPhysicsBody(bullet_body);
+    this->setScale(0.2f);
+    
 	setPosition(plane->getPosition());
 
 	_max_speed = kMaximumBulletSpeed;	// Should depend on bullet type.
 
 	_isEnemyBullet = plane->IsEnemy();
 	_isEnemyBullet ? this->setColor(Color3B(255, 0, 0)) : this->setColor(Color3B(0, 255, 0));
-	setScale(0.2f);
+	
 
+    
 	// I hate Maths.
 	_currentSpeed = Vec2(-1.0f, 0.0f).rotateByAngle(Vec2(), -DegreesToRadians(plane->getRotation() + 90)).getNormalized() * kMaximumBulletSpeed;
 }
