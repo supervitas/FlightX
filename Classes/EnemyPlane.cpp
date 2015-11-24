@@ -58,11 +58,11 @@ void EnemyPlane::addEvents() {
     
     listener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event) {
         cocos2d::Vec2 p = touch->getLocation();
-        cocos2d::Rect rect = this->getBoundingBox();
+//        cocos2d::Rect rect = this->getBoundingBox();
         
-        if(rect.containsPoint(p)) {
-            return true; // to indicate that we have consumed it.
-        }
+//        if(rect.containsPoint(p)) {
+//            return true; // to indicate that we have consumed it.
+//        }
         
         return false; // we did not consume this event, pass thru.
     };

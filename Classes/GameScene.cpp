@@ -1,5 +1,5 @@
 #include "GameScene.h"
-#include "EnemyPlane.h"
+//#include "EnemyPlane.h"
 #include "Plane.h"
 #include "Bullet.h"
 
@@ -52,7 +52,7 @@ bool GameScene::init()
     
     
     auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
+    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this, enemy_plane);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
  
 
@@ -134,7 +134,7 @@ bool GameScene::init()
     return true;
 }
 
-bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
+bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact, DefaultPlane *plane) {
 
 
     PhysicsBody *a = contact.getShapeA()->getBody();
@@ -143,12 +143,12 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
     {
         CCLOG("Planes Colission");
     }
-    if((3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask())){
+    if((2 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask()) || (3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask())){
         CCLOG("Bullet Colission");
         score++;
         scoreLabel->setString(std::to_string(score));
-
-        
+        plane->ApplyDamage(20);
+        a->getNode()->removeFromParent();
         
 
     }

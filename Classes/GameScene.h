@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "cocos2d.h"
+#include "EnemyPlane.h"
 #include "ui/CocosGUI.h"
 
 class GameScene : public cocos2d::Layer {
@@ -15,7 +16,7 @@ public:
     
     static cocos2d::Scene* createScene();
     void checkColision();
-    bool onContactBegin(cocos2d::PhysicsContact &contact);
+    bool onContactBegin(cocos2d::PhysicsContact &contact, DefaultPlane *plane);
     virtual bool init();
     
     CREATE_FUNC(GameScene);
