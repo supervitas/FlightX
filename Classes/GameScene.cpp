@@ -148,7 +148,7 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact, DefaultPlane *p
         score++;
         scoreLabel->setString(std::to_string(score));
         plane->ApplyDamage(20);
-        a->getNode()->removeFromParent();
+//        a->getNode()->removeFromParent();
         
 
     }
