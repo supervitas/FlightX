@@ -38,10 +38,10 @@ bool GameScene::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	SetDefaulBackground();
     
-    auto edgeBody = PhysicsBody::createEdgeBox( visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3 );
+    auto edgeBody = PhysicsBody::createEdgeBox( visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 2);
     auto edgeNode = Node::create();
     edgeNode ->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y ) );
-    edgeNode->setPhysicsBody( edgeBody );
+    edgeNode->setPhysicsBody(edgeBody);
     this->addChild( edgeNode );
 
     DefaultPlane *plane = DefaultPlane::create();
@@ -148,7 +148,9 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
         score++;
         scoreLabel->setString(std::to_string(score));
 
-//        b->getNode()->removeFromParent();
+        
+        
+
     }
     
     return true;

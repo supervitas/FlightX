@@ -15,7 +15,7 @@ public:
     
     static cocos2d::Scene* createScene();
     void checkColision();
-    bool onContactBegin(cocos2d::PhysicsContact &contact );
+    bool onContactBegin(cocos2d::PhysicsContact &contact);
     virtual bool init();
     
     CREATE_FUNC(GameScene);

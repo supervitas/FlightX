@@ -86,9 +86,11 @@ void Bullet::update(float delta)
 // Probably we should pass SimplePlane instance here to get all the values: plane type, isEnemy bool and initial rotation...
 void Bullet::initOptions(const DefaultPlane *plane)
 {
-    auto bullet_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,1,0));
+    auto bullet_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,0,0));
     bullet_body->setCollisionBitmask(3);
     bullet_body->setContactTestBitmask(true);
+    bullet_body->setDynamic(true);
+
     this->setPhysicsBody(bullet_body);
     this->setScale(0.2f);
     
