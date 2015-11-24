@@ -22,6 +22,7 @@ DefaultPlane* DefaultPlane::create()
 {
     DefaultPlane* pSprite = new DefaultPlane();
     
+
     if (pSprite->initWithFile("plane.png"))
     {
         pSprite->autorelease();
@@ -39,6 +40,12 @@ DefaultPlane* DefaultPlane::create()
 
 void DefaultPlane::initOptions() 
 {
+    auto plane_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,1,0));
+    plane_body->setCollisionBitmask(1);
+    plane_body->setContactTestBitmask(true);
+    this->setPhysicsBody(plane_body);
+    this->setScale(0.15);
+    this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 8));
 	_isEnemy = kDefaultPlaneOwnerFlag;
 	_baseHP = kDefaultPlaneHP;
 	_currentHP = _baseHP;

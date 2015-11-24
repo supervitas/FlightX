@@ -13,9 +13,16 @@ namespace
 
 Scene* GameScene::createScene()
 {
-    auto scene = Scene::create();
+    auto scene = Scene::createWithPhysics();  // For physics
+    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_ALL );
+    // 'layer' is an autorelease object
     auto layer = GameScene::create();
+    layer->setPhysicsWorld(scene->getPhysicsWorld());
+    
+    // add layer as a child to scene
     scene->addChild(layer);
+    
+    // return the scene
     return scene;
 }
 
@@ -29,16 +36,32 @@ bool GameScene::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	SetDefaulBackground();
+    
+    auto edgeBody = PhysicsBody::createEdgeBox( visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 3 );
+    auto edgeNode = Node::create();
+    edgeNode ->setPosition( Point( visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y ) );
+    edgeNode->setPhysicsBody( edgeBody );
+    this->addChild( edgeNode );
 
     DefaultPlane *plane = DefaultPlane::create();
-    plane->setScale(0.15);
-	plane->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 8));
-	this->addChild(plane, kPlaneZIndex);
+	this->addChild(plane);
     
     EnemyPlane *enemy_plane = EnemyPlane::create();
-    this->addChild(enemy_plane, kPlaneZIndex);
-  
-	// Keyboard input
+    auto enemy_plane_body = PhysicsBody::createBox(enemy_plane->getContentSize(), PhysicsMaterial(0,1,0));
+    enemy_plane_body->setCollisionBitmask(2);
+    enemy_plane_body->setContactTestBitmask(true);
+    enemy_plane->setPhysicsBody(enemy_plane_body);
+
+    this->addChild(enemy_plane);
+    
+    
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
+    this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
+ 
+
+    
+    // Keyboard input
 	{
 		auto listener = EventListenerKeyboard::create();
 		listener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, cocos2d::Event * event) 
@@ -115,7 +138,18 @@ bool GameScene::init()
     return true;
 }
 
-
+bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
+    // Do something
+    CCLOG("123");
+    PhysicsBody *a = contact.getShapeA()->getBody();
+    PhysicsBody *b = contact.getShapeB()->getBody();
+    if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask())) {
+        
+        CCLOG("YES");
+    }
+    
+    return true;
+}
 
 void GameScene::SetDefaulBackground()
 {

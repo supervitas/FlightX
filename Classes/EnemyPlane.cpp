@@ -8,12 +8,11 @@
 
 #include "EnemyPlane.h"
 USING_NS_CC;
-EnemyPlane::EnemyPlane(){
-    
-}
-EnemyPlane::~EnemyPlane(){
-    
-}
+EnemyPlane::EnemyPlane(){}
+EnemyPlane::~EnemyPlane(){}
+//void randomMove(EnemyPlane *plane){
+//    plane->MovePlane(Vec2(1.0f, .0f));
+//}
 
 EnemyPlane*  EnemyPlane::create(){
     EnemyPlane* pSprite = new EnemyPlane();
@@ -71,11 +70,3 @@ void EnemyPlane::addEvents() {
     scheduleUpdate();
 }
 
-
-//void EnemyPlane::touchEvent(cocos2d::Touch* touch)
-//{
-//    setRotation(getRotation() + 15);
-//    CCLOG("Health = %d", _currentHP);
-//    CCLOG("Rotation = %f", getRotation());
-//    
-//}

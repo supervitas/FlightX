@@ -66,7 +66,11 @@ bool Bullet::isStillOnScreen()
 {
     
 	auto boundings = getParent()->getBoundingBox();
-	auto bulletWillLeaveScreenOnNextFrame = boundings.intersectsCircle(getPosition(), kMaximumBulletSpeed);
+	auto bulletWillLeaveScreenOnNextFrame = boundings.intersectsCircle(getPosition(), 0);
+
+//    if (this->getParent()->) {
+    
+//    }
     
     // There may be some more complex logic.
 	return bulletWillLeaveScreenOnNextFrame;
