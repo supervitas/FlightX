@@ -13,9 +13,11 @@ public:
         mWorld->setGravity(cocos2d::Vect(0,0));  // No g*ravity
     }
     cocos2d::PhysicsWorld* mWorld;
-    
+    void applySpeed(float deltaTime);
     static cocos2d::Scene* createScene();
-    void checkColision();
+    bool checkColision();
+    void update(float delta);
+    void unscheduleUpdateAndDelete();
     bool onContactBegin(cocos2d::PhysicsContact &contact, DefaultPlane *plane);
     virtual bool init();
     
@@ -23,7 +25,8 @@ public:
 private:
 	void SetDefaulBackground();
     int score = 0;
-//    cocos2d::Label scorelabel;
+    cocos2d::ccArray *bullets;
+    cocos2d::ccArray *planes;
 };
 
 #endif // __GAMESCENE_H__

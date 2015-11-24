@@ -10,6 +10,8 @@ namespace
 	const int kPlaneZIndex = 1;
 	const int kBulletZIndex = 2;
     Label *scoreLabel;
+
+    
 };
 
 Scene* GameScene::createScene()
@@ -26,6 +28,28 @@ Scene* GameScene::createScene()
     // return the scene
     return scene;
 }
+void GameScene::update(float delta)
+{
+    // If bullet is offscreen, destroy it.
+    if (!checkColision()){
+        unscheduleUpdateAndDelete();
+    }
+}
+
+
+bool GameScene::checkColision(){
+    auto boundings = getParent()->getBoundingBox();
+    auto bulletWillLeaveScreenOnNextFrame = boundings.intersectsCircle(getPosition(), 0);
+    
+    // There may be some more complex logic.
+    return bulletWillLeaveScreenOnNextFrame;
+}
+void GameScene::unscheduleUpdateAndDelete()
+{
+
+    this->unscheduleUpdate();
+    removeFromParentAndCleanup(true);
+}
 
 bool GameScene::init()
 {
@@ -38,11 +62,11 @@ bool GameScene::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	SetDefaulBackground();
     
-    auto edgeBody = PhysicsBody::createEdgeBox( visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 2);
+    auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 2);
     auto edgeNode = Node::create();
     edgeNode ->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y ) );
     edgeNode->setPhysicsBody(edgeBody);
-    this->addChild( edgeNode );
+    this->addChild(edgeNode);
 
     DefaultPlane *plane = DefaultPlane::create();
 	this->addChild(plane);
@@ -51,13 +75,11 @@ bool GameScene::init()
     this->addChild(enemy_plane);
     
     
+    
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this, enemy_plane);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
  
-
-    
-    // Keyboard input
 	{
 		auto listener = EventListenerKeyboard::create();
 		listener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode, cocos2d::Event * event) 
@@ -83,6 +105,7 @@ bool GameScene::init()
             case cocos2d::EventKeyboard::KeyCode::KEY_K:
                 {
                     bullet = Bullet::create(enemy_plane);
+//                    bullet_mas.pushBack(*bullet);
                     this->addChild(bullet, kBulletZIndex);
                     CCLOG("Bullet Rotation = %f", bullet->GetRotation()*(180.0f/3.14156));
                 }
@@ -92,7 +115,7 @@ bool GameScene::init()
 				// Spawn Bullet
 			{
 				bullet = Bullet::create(plane);
-				this->addChild(bullet, kBulletZIndex);
+				this->addChild(bullet, -3);
 
 			}
 				break;
@@ -148,7 +171,7 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact, DefaultPlane *p
         score++;
         scoreLabel->setString(std::to_string(score));
         plane->ApplyDamage(20);
-//        a->getNode()->removeFromParent();
+
         
 
     }

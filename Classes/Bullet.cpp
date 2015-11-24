@@ -90,7 +90,7 @@ void Bullet::initOptions(const DefaultPlane *plane)
     bullet_body->setCollisionBitmask(3);
     bullet_body->setContactTestBitmask(true);
     bullet_body->setDynamic(true);
-
+    
     this->setPhysicsBody(bullet_body);
     this->setScale(0.2f);
     
