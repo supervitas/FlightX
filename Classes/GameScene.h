@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include "cocos2d.h"
-#include "Plane.h"
+#include "EnemyPlane.h"
 #include "ui/CocosGUI.h"
 
 class GameScene : public cocos2d::Layer {
@@ -22,7 +22,7 @@ public:
 private:
 	void SetDefaulBackground();
     int score = 0;
-    Vector<DefaultPlane*> masPlanes;
+    Vector<EnemyPlane*> masPlanes;
 };
 
 #endif // __GAMESCENE_H__

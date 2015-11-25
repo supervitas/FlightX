@@ -92,9 +92,7 @@ void Bullet::initOptions(const DefaultPlane *plane)
     bullet_body->setDynamic(true);
     this->setPhysicsBody(bullet_body);
     this->setScale(0.2f);
-    
 	setPosition(plane->getPosition());
-
 	_max_speed = kMaximumBulletSpeed;	// Should depend on bullet type.
 
 	_isEnemyBullet = plane->IsEnemy();

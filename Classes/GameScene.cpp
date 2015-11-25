@@ -1,6 +1,6 @@
 #include "GameScene.h"
-#include "EnemyPlane.h"
 #include "Bullet.h"
+
 
 USING_NS_CC;
 
@@ -52,12 +52,13 @@ bool GameScene::init()
 	this->addChild(plane);
     
     EnemyPlane *enemy_plane = EnemyPlane::create();
-    masPlanes.pushBack(enemy_plane);
     this->addChild(enemy_plane);
     
-    masPlanes.at(0)->ApplyDamage(20);
+    for (int i = 0; i < 10; i++) {
+        EnemyPlane *en_pl= EnemyPlane::create();
+        this->addChild(en_pl);
+    }
     
-
 
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
@@ -140,15 +141,18 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
     if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask()))
     {
         
-        CCLOG("Planes Colission");
+//        CCLOG("Planes Colission");
     }
     if ((2 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask()) || (3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask())){
-        CCLOG("Bullet Colission");
-//        a->getNode()->removeFromParent();
-        auto planeTag = b->getTag();
-
-
-
+        if (-1 == b->getNode()->getTag())
+        {
+            ((EnemyPlane*) a->getNode())->ApplyDamage(20);
+//            b->getNode()->removeFromParentAndCleanup(true);
+        } else {
+            ((EnemyPlane*) b->getNode())->ApplyDamage(20);
+//            a->getNode()->removeFromParentAndCleanup(true);
+        }
+        
         
         score++;
         scoreLabel->setString(std::to_string(score));

@@ -122,9 +122,9 @@ void DefaultPlane::addEvents() {
 
 void DefaultPlane::touchEvent(cocos2d::Touch* touch)
 {
-	setRotation(getRotation() + 15);
+
     CCLOG("Health = %d", _currentHP);
     CCLOG("Enemy = %d",_isEnemy);
-	CCLOG("Rotation = %f", getRotation());
+
 
 }
