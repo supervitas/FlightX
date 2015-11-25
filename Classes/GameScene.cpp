@@ -1,6 +1,5 @@
 #include "GameScene.h"
-//#include "EnemyPlane.h"
-#include "Plane.h"
+#include "EnemyPlane.h"
 #include "Bullet.h"
 
 USING_NS_CC;
@@ -11,13 +10,14 @@ namespace
 	const int kBulletZIndex = 2;
     Label *scoreLabel;
 
+
     
 };
 
 Scene* GameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();  // For physics
-    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_ALL);
+    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_NONE);
     // 'layer' is an autorelease object
     auto layer = GameScene::create();
     layer->setPhysicsWorld(scene->getPhysicsWorld());
@@ -28,28 +28,6 @@ Scene* GameScene::createScene()
     // return the scene
     return scene;
 }
-void GameScene::update(float delta)
-{
-    // If bullet is offscreen, destroy it.
-    if (!checkColision()){
-        unscheduleUpdateAndDelete();
-    }
-}
-
-
-bool GameScene::checkColision(){
-    auto boundings = getParent()->getBoundingBox();
-    auto bulletWillLeaveScreenOnNextFrame = boundings.intersectsCircle(getPosition(), 0);
-    
-    // There may be some more complex logic.
-    return bulletWillLeaveScreenOnNextFrame;
-}
-void GameScene::unscheduleUpdateAndDelete()
-{
-
-    this->unscheduleUpdate();
-    removeFromParentAndCleanup(true);
-}
 
 bool GameScene::init()
 {
@@ -57,6 +35,7 @@ bool GameScene::init()
     {
         return false;	
     }
+
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -64,20 +43,24 @@ bool GameScene::init()
     
     auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 2);
     auto edgeNode = Node::create();
-    edgeNode ->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y ) );
+    edgeNode ->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y ));
     edgeNode->setPhysicsBody(edgeBody);
     this->addChild(edgeNode);
+
 
     DefaultPlane *plane = DefaultPlane::create();
 	this->addChild(plane);
     
     EnemyPlane *enemy_plane = EnemyPlane::create();
+    masPlanes.pushBack(enemy_plane);
     this->addChild(enemy_plane);
     
+    masPlanes.at(0)->ApplyDamage(20);
     
-    
+
+
     auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this, enemy_plane);
+    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
  
 	{
@@ -87,9 +70,6 @@ bool GameScene::init()
 			Bullet *bullet;
 			switch (keyCode)
 			{
-				// Plane Movement
-			case cocos2d::EventKeyboard::KeyCode::KEY_NONE:
-				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 				plane->MovePlane(Vec2(-1.0f, .0f));
 				break;
@@ -105,25 +85,22 @@ bool GameScene::init()
             case cocos2d::EventKeyboard::KeyCode::KEY_K:
                 {
                     bullet = Bullet::create(enemy_plane);
-//                    bullet_mas.pushBack(*bullet);
                     this->addChild(bullet, kBulletZIndex);
                     CCLOG("Bullet Rotation = %f", bullet->GetRotation()*(180.0f/3.14156));
                 }
                 break;
 
 			case cocos2d::EventKeyboard::KeyCode::KEY_SPACE:
-				// Spawn Bullet
 			{
 				bullet = Bullet::create(plane);
-				this->addChild(bullet, -3);
+				this->addChild(bullet, kBulletZIndex);
 
 			}
-				break;
+            break;
 			default:
 				break;
 			}
 		};
-
 		listener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event)
 		{
 
@@ -157,23 +134,24 @@ bool GameScene::init()
     return true;
 }
 
-bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact, DefaultPlane *plane) {
-
-
+bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
     PhysicsBody *a = contact.getShapeA()->getBody();
     PhysicsBody *b = contact.getShapeB()->getBody();
     if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask()))
     {
+        
         CCLOG("Planes Colission");
     }
-    if((2 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask()) || (3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask())){
+    if ((2 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask()) || (3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask())){
         CCLOG("Bullet Colission");
-        score++;
-        scoreLabel->setString(std::to_string(score));
-        plane->ApplyDamage(20);
+//        a->getNode()->removeFromParent();
+        auto planeTag = b->getTag();
+
+
 
         
-
+        score++;
+        scoreLabel->setString(std::to_string(score));
     }
     
     return true;
