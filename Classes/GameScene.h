@@ -4,6 +4,7 @@
 #include <iostream>
 #include "cocos2d.h"
 #include "EnemyPlane.h"
+#include "Bullet.h"
 #include "ui/CocosGUI.h"
 
 class GameScene : public cocos2d::Layer {
@@ -22,7 +23,7 @@ public:
 private:
 	void SetDefaulBackground();
     int score = 0;
-    Vector<EnemyPlane*> masPlanes;
+    Vector<Bullet*> bulletsMas;
 };
 
 #endif // __GAMESCENE_H__

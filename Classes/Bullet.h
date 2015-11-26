@@ -12,9 +12,9 @@ public:
     static Bullet* create(const DefaultPlane *plane);
 	void update(float delta) override;
     void touchEvent(cocos2d::Touch* touch);
-
+    void unscheduleUpdateAndDelete();
 	float GetRotation() const;
-    
+    void buldelete();
 private:
 
 	Bullet();
@@ -24,7 +24,7 @@ private:
 	void addEvents();
 	void applySpeed(float deltaTime);
 	bool isStillOnScreen();
-	void unscheduleUpdateAndDelete();
+	
 
 private:
 	int _damadge;

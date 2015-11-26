@@ -9,15 +9,15 @@ namespace
 	const int kPlaneZIndex = 1;
 	const int kBulletZIndex = 2;
     Label *scoreLabel;
-
-
+    int bulcount = 0;
+    
     
 };
 
 Scene* GameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();  // For physics
-    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_NONE);
+    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_ALL);
     // 'layer' is an autorelease object
     auto layer = GameScene::create();
     layer->setPhysicsWorld(scene->getPhysicsWorld());
@@ -94,6 +94,9 @@ bool GameScene::init()
 			case cocos2d::EventKeyboard::KeyCode::KEY_SPACE:
 			{
 				bullet = Bullet::create(plane);
+                bullet->setTag(bulcount);
+                bulcount++;
+                bulletsMas.pushBack(bullet);
 				this->addChild(bullet, kBulletZIndex);
 
 			}
@@ -143,15 +146,25 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
         
 //        CCLOG("Planes Colission");
     }
-    if ((2 == a->getCollisionBitmask() && 3 == b->getCollisionBitmask()) || (3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask())){
-        if (-1 == b->getNode()->getTag())
-        {
-            ((EnemyPlane*) a->getNode())->ApplyDamage(20);
-//            b->getNode()->removeFromParentAndCleanup(true);
-        } else {
+    if ((3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) ){
+//        std::cout<<b->getNode()->getTag();
+//        if (-1 == b->getNode()->getTag())
+//        {
+//            ((EnemyPlane*) a->getNode())->ApplyDamage(20);
+//            ((Bullet*)b->getNode())->unscheduleUpdateAndDelete();
+//            
+//
+//        } else {
             ((EnemyPlane*) b->getNode())->ApplyDamage(20);
-//            a->getNode()->removeFromParentAndCleanup(true);
+        
+
+        for (int i = 0; i<bulletsMas.size(); i++) {
+            if (bulletsMas.at(i)->getTag() == a->getNode()->getTag()) {
+                bulletsMas.at(i)->unscheduleUpdateAndDelete();
+            }
         }
+//            ((Bullet*)a->getNode())->buldelete();
+
         
         
         score++;

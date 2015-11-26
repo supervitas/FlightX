@@ -46,6 +46,11 @@ float Bullet::GetRotation() const
 	return _currentSpeed.getAngle();
 }
 
+//void Bullet::buldelete() {
+//    
+//    removeFromParentAndCleanup(true);
+//    
+//}
 void Bullet::unscheduleUpdateAndDelete()
 {
 	// Obviously, we don't want all update() functions called after object was destroyed.
@@ -86,7 +91,7 @@ void Bullet::update(float delta)
 // Probably we should pass SimplePlane instance here to get all the values: plane type, isEnemy bool and initial rotation...
 void Bullet::initOptions(const DefaultPlane *plane)
 {
-    auto bullet_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,0,1));
+    auto bullet_body = PhysicsBody::createCircle(1);
     bullet_body->setCollisionBitmask(3);
     bullet_body->setContactTestBitmask(true);
     bullet_body->setDynamic(true);
