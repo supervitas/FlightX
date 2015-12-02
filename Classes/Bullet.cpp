@@ -19,7 +19,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet() 
 {
-	//CCLOG("Bullet destroyed!");
+//	CCLOG("Bullet destroyed!");
 }
 
 Bullet*  Bullet::create(const DefaultPlane *plane)
@@ -91,7 +91,7 @@ void Bullet::update(float delta)
 // Probably we should pass SimplePlane instance here to get all the values: plane type, isEnemy bool and initial rotation...
 void Bullet::initOptions(const DefaultPlane *plane)
 {
-    auto bullet_body = PhysicsBody::createCircle(1);
+    auto bullet_body = PhysicsBody::createCircle(1,PhysicsMaterial(0,0,0));
     bullet_body->setCollisionBitmask(3);
     bullet_body->setContactTestBitmask(true);
     bullet_body->setDynamic(true);

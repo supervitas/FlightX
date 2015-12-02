@@ -47,18 +47,15 @@ bool GameScene::init()
     edgeNode->setPhysicsBody(edgeBody);
     this->addChild(edgeNode);
 
-
+   
+    
     DefaultPlane *plane = DefaultPlane::create();
 	this->addChild(plane);
     
     EnemyPlane *enemy_plane = EnemyPlane::create();
     this->addChild(enemy_plane);
-    
-    for (int i = 0; i < 10; i++) {
-        EnemyPlane *en_pl= EnemyPlane::create();
-        this->addChild(en_pl);
-    }
-    
+
+   
 
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
@@ -85,24 +82,28 @@ bool GameScene::init()
 				break;
             case cocos2d::EventKeyboard::KeyCode::KEY_K:
                 {
-                    bullet = Bullet::create(enemy_plane);
-                    this->addChild(bullet, kBulletZIndex);
-                    CCLOG("Bullet Rotation = %f", bullet->GetRotation()*(180.0f/3.14156));
+                    EnemyPlane *en_plane = EnemyPlane::create();
+                    this->addChild(en_plane);
+                    break;
+
                 }
-                break;
+                
 
 			case cocos2d::EventKeyboard::KeyCode::KEY_SPACE:
 			{
 				bullet = Bullet::create(plane);
                 bullet->setTag(bulcount);
+                bulletsMas.insert(bulcount, bullet);
                 bulcount++;
-                bulletsMas.pushBack(bullet);
 				this->addChild(bullet, kBulletZIndex);
+                if (bulcount > 40) {
+                    bulcount = 0;
+                }
 
 			}
             break;
 			default:
-				break;
+            break;
 			}
 		};
 		listener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event)
@@ -113,11 +114,13 @@ bool GameScene::init()
 				// Plane Movement
 			case cocos2d::EventKeyboard::KeyCode::KEY_NONE:
 				break;
+
 			case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 				plane->MovePlane(Vec2(1.0f, .0f));
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 				plane->MovePlane(Vec2(-1.0f, .0f));
+
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
 				plane->MovePlane(Vec2(.0f, -1.0f));
@@ -125,6 +128,7 @@ bool GameScene::init()
 			case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 				plane->MovePlane(Vec2(.0f, 1.0f));
 				break;
+          
 			default:
 				break;
 			};
@@ -132,7 +136,6 @@ bool GameScene::init()
 
 		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, plane);
 	}
-    
 	// Update everything in this scene.
 	this->scheduleUpdate();
     return true;
@@ -143,30 +146,19 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
     PhysicsBody *b = contact.getShapeB()->getBody();
     if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask()))
     {
-        
 //        CCLOG("Planes Colission");
     }
-    if ((3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) ){
-//        std::cout<<b->getNode()->getTag();
-//        if (-1 == b->getNode()->getTag())
-//        {
-//            ((EnemyPlane*) a->getNode())->ApplyDamage(20);
-//            ((Bullet*)b->getNode())->unscheduleUpdateAndDelete();
-//            
-//
-//        } else {
+    if ((3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()))
+    {
             ((EnemyPlane*) b->getNode())->ApplyDamage(20);
         
 
-        for (int i = 0; i<bulletsMas.size(); i++) {
+        for (int i = 0; i < bulletsMas.size(); i++) {
             if (bulletsMas.at(i)->getTag() == a->getNode()->getTag()) {
                 bulletsMas.at(i)->unscheduleUpdateAndDelete();
             }
         }
-//            ((Bullet*)a->getNode())->buldelete();
 
-        
-        
         score++;
         scoreLabel->setString(std::to_string(score));
     }

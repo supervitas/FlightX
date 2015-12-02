@@ -23,7 +23,7 @@ public:
 	void skewOnMovement();
 	void applySpeed(float deltaTime);
 	void unscheduleUpdateAndDelete();
-    
+    void makeBoom();
 protected:
     int _currentHP;
 	int _baseHP;

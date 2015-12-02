@@ -34,7 +34,7 @@ DefaultPlane* DefaultPlane::create()
 
 void DefaultPlane::initOptions() 
 {
-    auto plane_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,1,0));
+    auto plane_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,0,0));
     plane_body->setCollisionBitmask(1);
     plane_body->setContactTestBitmask(true);
     plane_body->setDynamic(true);
@@ -48,12 +48,44 @@ void DefaultPlane::initOptions()
 	_movementDirection = Vec2();
 }
 
+void DefaultPlane::makeBoom()
+{
+//    auto boomSprite =  Sprite::create("boom.png");
+//    boomSprite->setScale(0.1);
+//    
+//    auto expandAction = ScaleTo::create(1.0f, 1.5f);
+//    auto fadeAction = FadeOut::create(0.8f);
+//    auto action = Spawn::createWithTwoActions(expandAction, fadeAction);
+//    
+//    boomSprite->setPosition(this->getPosition());
+//    boomSprite->runAction(action);
+//    this->getParent()->addChild(boomSprite);
+    auto emitter = ParticleSun::create();
+    
+    // set the duration
+    emitter->setDuration(0.5);
+    
+    // radius mode
+    emitter->setEmitterMode(ParticleSystem::Mode::RADIUS);
+    emitter->setPosition(this->getPosition());
+    emitter->setEndRadius(ParticleSystem::START_RADIUS_EQUAL_TO_END_RADIUS);
+    emitter->setEndRadiusVar(0);    // not used when start == end
+    
+    this->getParent()-> addChild(emitter, 10);
+
+    
+
+}
+
 void DefaultPlane::ApplyDamage(const int damage)
 {
 	_currentHP -= damage;
 	//Play animation.
-	if (_currentHP <= 0)
+    if (_currentHP <= 0)
+    {
+        makeBoom();
 		unscheduleUpdateAndDelete();
+    }
 }
 
 bool DefaultPlane::IsEnemy() const
@@ -90,9 +122,11 @@ bool DefaultPlane::MovePlane(const Vec2 direction)
 	return true;
 }
 
+
 void DefaultPlane::update(float delta)
 {
 	applySpeed(delta);
+    this->setRotation(0);
 }
 
 

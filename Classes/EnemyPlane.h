@@ -20,6 +20,7 @@ public:
     void initOptions();
     void Spawn();
     void addEvents();
+    void update(float delta) override;
 //    void randomMove(EnemyPlane *plane);
     
     

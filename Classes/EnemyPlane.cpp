@@ -9,10 +9,10 @@
 #include "EnemyPlane.h"
 USING_NS_CC;
 EnemyPlane::EnemyPlane(){}
-EnemyPlane::~EnemyPlane(){}
-//void randomMove(EnemyPlane *plane){
-//    plane->MovePlane(Vec2(1.0f, .0f));
-//}
+EnemyPlane::~EnemyPlane()
+{
+    
+}
 
 EnemyPlane*  EnemyPlane::create(){
     EnemyPlane* pSprite = new EnemyPlane();
@@ -27,7 +27,6 @@ EnemyPlane*  EnemyPlane::create(){
         
         return pSprite;
     }
-    
     CC_SAFE_DELETE(pSprite);
     return NULL;
 
@@ -36,11 +35,10 @@ EnemyPlane*  EnemyPlane::create(){
 
 void EnemyPlane::initOptions()
 {
-    auto plane_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,1,0));
+    auto plane_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,0,0));
     plane_body->setCollisionBitmask(2);
     plane_body->setContactTestBitmask(true);
     plane_body->setDynamic(true);// Физика
-
     this->setTag(2);
     this->setPhysicsBody(plane_body);
     this->setScale(0.15);
@@ -53,6 +51,12 @@ void EnemyPlane::initOptions()
     this->setColor(Color3B(255,0,5));
     this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 1.2));
 }
+void EnemyPlane::update(float delta)
+{
+    applySpeed(delta);
+    this->setRotation(180);
+}
+
 
 void EnemyPlane::addEvents() {
     auto listener = cocos2d::EventListenerTouchOneByOne::create();
@@ -61,11 +65,9 @@ void EnemyPlane::addEvents() {
     listener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event) {
         cocos2d::Vec2 p = touch->getLocation();
         cocos2d::Rect rect = this->getBoundingBox();
-        
         if(rect.containsPoint(p)) {
             return true; // to indicate that we have consumed it.
         }
-        
         return false; // we did not consume this event, pass thru.
     };
     
