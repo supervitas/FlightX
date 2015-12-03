@@ -21,7 +21,7 @@ public:
     void Spawn();
     void addEvents();
     void update(float delta) override;
-//    void randomMove(EnemyPlane *plane);
+    void randomMove(Vec2 coord);
     
     
 

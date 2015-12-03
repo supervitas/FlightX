@@ -55,8 +55,21 @@ void EnemyPlane::update(float delta)
 {
     applySpeed(delta);
     this->setRotation(180);
+    
 }
+void EnemyPlane::randomMove(Vec2 coord)
+{
+    
+    // Move a sprite to a specific location over 2 seconds.
+    auto moveTo = MoveBy::create(1,coord);
+    
+    this->runAction(moveTo);
+    
+    // Move a sprite 50 pixels to the right, and 0 pixels to the top over 2 seconds.
+//    auto moveBy = MoveBy::create(5, plane->getPosition());
+    
 
+}
 
 void EnemyPlane::addEvents() {
     auto listener = cocos2d::EventListenerTouchOneByOne::create();

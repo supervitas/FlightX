@@ -10,6 +10,8 @@ namespace
 	const int kBulletZIndex = 2;
     Label *scoreLabel;
     int bulcount = 0;
+    Vector<EnemyPlane*> vectorEnemyPlanes;
+    DefaultPlane* plane;
     
     
 };
@@ -17,12 +19,9 @@ namespace
 Scene* GameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();  // For physics
-    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_ALL);
-    // 'layer' is an autorelease object
+    scene->getPhysicsWorld()->setDebugDrawMask( PhysicsWorld::DEBUGDRAW_NONE);
     auto layer = GameScene::create();
     layer->setPhysicsWorld(scene->getPhysicsWorld());
-    
-    // add layer as a child to scene
     scene->addChild(layer);
     
     // return the scene
@@ -49,12 +48,9 @@ bool GameScene::init()
 
    
     
-    DefaultPlane *plane = DefaultPlane::create();
+    plane = DefaultPlane::create();
 	this->addChild(plane);
     
-    EnemyPlane *enemy_plane = EnemyPlane::create();
-    this->addChild(enemy_plane);
-
    
 
     auto contactListener = EventListenerPhysicsContact::create();
@@ -83,7 +79,10 @@ bool GameScene::init()
             case cocos2d::EventKeyboard::KeyCode::KEY_K:
                 {
                     EnemyPlane *en_plane = EnemyPlane::create();
+
                     this->addChild(en_plane);
+                    vectorEnemyPlanes.pushBack(en_plane);
+                    
                     break;
 
                 }
@@ -127,6 +126,7 @@ bool GameScene::init()
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 				plane->MovePlane(Vec2(.0f, 1.0f));
+                    
 				break;
           
 			default:
@@ -146,7 +146,8 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
     PhysicsBody *b = contact.getShapeB()->getBody();
     if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask()))
     {
-//        CCLOG("Planes Colission");
+        ((EnemyPlane*) b->getNode())->ApplyDamage(100);
+        ((DefaultPlane*) a->getNode())->ApplyDamage(100);
     }
     if ((3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()))
     {
@@ -189,4 +190,11 @@ void GameScene::SetDefaulBackground()
     scoreLabel->setPosition(Vec2(origin.x + visibleSize.width-15,
                                  origin.y + visibleSize.height-10));
     this->addChild(scoreLabel, 0);
+}
+
+void GameScene::update(float delta)
+{
+    
+
+    
 }

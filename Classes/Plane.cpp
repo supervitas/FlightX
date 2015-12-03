@@ -60,21 +60,13 @@ void DefaultPlane::makeBoom()
 //    boomSprite->setPosition(this->getPosition());
 //    boomSprite->runAction(action);
 //    this->getParent()->addChild(boomSprite);
-    auto emitter = ParticleSun::create();
-    
-    // set the duration
-    emitter->setDuration(0.5);
-    
-    // radius mode
+    auto emitter = ParticleFire::create();
     emitter->setEmitterMode(ParticleSystem::Mode::RADIUS);
+    emitter->setDuration(0.3);
+    emitter->setStartRadius(0.2);
     emitter->setPosition(this->getPosition());
-    emitter->setEndRadius(ParticleSystem::START_RADIUS_EQUAL_TO_END_RADIUS);
-    emitter->setEndRadiusVar(0);    // not used when start == end
-    
-    this->getParent()-> addChild(emitter, 10);
-
-    
-
+    emitter->setEndRadius(10);
+    this->getParent()-> addChild(emitter, 1);
 }
 
 void DefaultPlane::ApplyDamage(const int damage)
