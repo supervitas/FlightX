@@ -11,6 +11,7 @@ USING_NS_CC;
 EnemyPlane::EnemyPlane(){}
 EnemyPlane::~EnemyPlane()
 {
+    CCLOG("des");
     
 }
 
@@ -50,6 +51,7 @@ void EnemyPlane::initOptions()
     this->setRotation(180);
     this->setColor(Color3B(255,0,5));
     this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 1.2));
+    this->MovePlane(Vec2(0.0f, -1.0f));
 }
 void EnemyPlane::update(float delta)
 {
@@ -60,13 +62,7 @@ void EnemyPlane::update(float delta)
 void EnemyPlane::randomMove(Vec2 coord)
 {
     
-    // Move a sprite to a specific location over 2 seconds.
-    auto moveTo = MoveBy::create(1,coord);
-    
-    this->runAction(moveTo);
-    
-    // Move a sprite 50 pixels to the right, and 0 pixels to the top over 2 seconds.
-//    auto moveBy = MoveBy::create(5, plane->getPosition());
+
     
 
 }
