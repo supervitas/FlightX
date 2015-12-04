@@ -50,9 +50,11 @@ void Bullet::unscheduleUpdateAndDelete()
 {
 	// Obviously, we don't want all update() functions called after object was destroyed.
 	this->unscheduleUpdate();
-	removeFromParentAndCleanup(true);
-	//CCLOG("Bullet unscheduled!");
-	this->~Bullet();
+	removeFromParent();
+	
+	// TODO: Fix enemy bullets.
+	if (!this->_isEnemyBullet)
+		this->~Bullet();
 }
 
 void Bullet::applySpeed(float deltaTime)

@@ -9,21 +9,24 @@
 #define EnemyPlane_hpp
 #include "cocos2d.h"
 #include "Plane.h"
+#include "Behaviour.h"
 
 USING_NS_CC;
 class EnemyPlane : public DefaultPlane
 {
 public:
-    EnemyPlane();
+	EnemyPlane(DefaultPlane* const player_plane);
     ~EnemyPlane();
-    static EnemyPlane* create();
+	static EnemyPlane* create(DefaultPlane* const player_plane);
     void initOptions();
     void Spawn();
     void addEvents();
     void update(float delta) override;
     void randomMove(Vec2 coord);
-    
-    
+
+protected:
+	AbstractPlaneBehavoiur* _behaviour;
+        
 
 };
 

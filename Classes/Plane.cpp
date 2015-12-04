@@ -1,4 +1,5 @@
 #include "Plane.h"
+#include "Bullet.h"
 USING_NS_CC;
 
 namespace
@@ -114,6 +115,11 @@ bool DefaultPlane::MovePlane(const Vec2 direction)
 	return true;
 }
 
+bool DefaultPlane::StopPlane()
+{
+	_movementDirection = Vec2();
+	return true;
+}
 
 void DefaultPlane::update(float delta)
 {
@@ -121,6 +127,12 @@ void DefaultPlane::update(float delta)
     this->setRotation(0);
 }
 
+// TODO:Rework bullet creation and collision management.
+void DefaultPlane::Shoot()
+{
+	Bullet *bullet = Bullet::create(this);
+	this->getParent()->addChild(bullet);
+}
 
 void DefaultPlane::addEvents() {
     auto listener = cocos2d::EventListenerTouchOneByOne::create();

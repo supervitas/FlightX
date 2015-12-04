@@ -10,9 +10,7 @@ namespace
 	const int kBulletZIndex = 2;
     Label *scoreLabel;
     int bulcount = 0;
-    Vector<EnemyPlane*> vectorEnemyPlanes;
-    DefaultPlane* plane;
-    
+    Vector<EnemyPlane*> vectorEnemyPlanes;    
     
 };
 
@@ -38,7 +36,7 @@ bool GameScene::init()
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-	SetDefaulBackground();
+	SetDefaultBackground();
     
     auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 2);
     auto edgeNode = Node::create();
@@ -48,8 +46,8 @@ bool GameScene::init()
 
    
     
-    plane = DefaultPlane::create();
-	this->addChild(plane);
+	_player_plane = DefaultPlane::create();
+	this->addChild(_player_plane);
     
    
 
@@ -65,20 +63,20 @@ bool GameScene::init()
 			switch (keyCode)
 			{
 			case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-				plane->MovePlane(Vec2(-1.0f, .0f));
+				GetPlayerPlane()->MovePlane(Vec2(-1.0f, .0f));
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-				plane->MovePlane(Vec2(1.0f, .0f));
+				GetPlayerPlane()->MovePlane(Vec2(1.0f, .0f));
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
-				plane->MovePlane(Vec2(.0f, 1.0f));
+				GetPlayerPlane()->MovePlane(Vec2(.0f, 1.0f));
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-				plane->MovePlane(Vec2(.0f, -1.0f));
+				GetPlayerPlane()->MovePlane(Vec2(.0f, -1.0f));
 				break;
             case cocos2d::EventKeyboard::KeyCode::KEY_K:
                 {
-                    EnemyPlane *en_plane = EnemyPlane::create();
+					EnemyPlane *en_plane = EnemyPlane::create(GetPlayerPlane());
 
                     this->addChild(en_plane);
                     vectorEnemyPlanes.pushBack(en_plane);
@@ -90,7 +88,7 @@ bool GameScene::init()
 
 			case cocos2d::EventKeyboard::KeyCode::KEY_SPACE:
 			{
-				bullet = Bullet::create(plane);
+				bullet = Bullet::create(GetPlayerPlane());
                 bullet->setTag(bulcount);
                 bulletsMas.insert(bulcount, bullet);
                 bulcount++;
@@ -110,22 +108,22 @@ bool GameScene::init()
 
 			switch (keyCode) 
 			{
-				// Plane Movement
+				// GetPlayerPlane() Movement
 			case cocos2d::EventKeyboard::KeyCode::KEY_NONE:
 				break;
 
 			case cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-				plane->MovePlane(Vec2(1.0f, .0f));
+				GetPlayerPlane()->MovePlane(Vec2(1.0f, .0f));
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-				plane->MovePlane(Vec2(-1.0f, .0f));
+				GetPlayerPlane()->MovePlane(Vec2(-1.0f, .0f));
 
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
-				plane->MovePlane(Vec2(.0f, -1.0f));
+				GetPlayerPlane()->MovePlane(Vec2(.0f, -1.0f));
 				break;
 			case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-				plane->MovePlane(Vec2(.0f, 1.0f));
+				GetPlayerPlane()->MovePlane(Vec2(.0f, 1.0f));
                     
 				break;
           
@@ -134,11 +132,16 @@ bool GameScene::init()
 			};
 		};
 
-		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, plane);
+		this->_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, GetPlayerPlane());
 	}
 	// Update everything in this scene.
 	this->scheduleUpdate();
     return true;
+}
+
+DefaultPlane* GameScene::GetPlayerPlane()
+{
+	return _player_plane;
 }
 
 bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
@@ -167,7 +170,7 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
     return true;
 }
 
-void GameScene::SetDefaulBackground()
+void GameScene::SetDefaultBackground()
 {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();

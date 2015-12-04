@@ -11,7 +11,10 @@ public:
     
 	bool IsEnemy() const;
 	void ApplyDamage(const int damage);
+	void Shoot();
+
 	bool MovePlane(const Vec2 direction);
+	bool StopPlane();
 	Vec2 GetCurrentSpeed();
     
 	void update(float delta) override;

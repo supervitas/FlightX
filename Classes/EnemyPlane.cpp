@@ -7,16 +7,23 @@
 //
 
 #include "EnemyPlane.h"
+#include "Behaviour.h"
+#include "GameScene.h"
 USING_NS_CC;
-EnemyPlane::EnemyPlane(){}
+EnemyPlane::EnemyPlane(DefaultPlane* const player_plane)
+{
+	_behaviour = new SimplePlaneBehaviour(this, player_plane);
+}
+
 EnemyPlane::~EnemyPlane()
 {
     CCLOG("des");
     
 }
 
-EnemyPlane*  EnemyPlane::create(){
-    EnemyPlane* pSprite = new EnemyPlane();
+EnemyPlane*  EnemyPlane::create(DefaultPlane* const player_plane)
+{
+    EnemyPlane* pSprite = new EnemyPlane(player_plane);
     
     if (pSprite->initWithFile("plane.png"))
     {
@@ -46,15 +53,15 @@ void EnemyPlane::initOptions()
     _isEnemy = true;
     _baseHP = 100;
     _currentHP = _baseHP;
-    _maximalSpeed = 100.0f;
+    _maximalSpeed = 50.0f;
     _movementDirection = Vec2();
     this->setRotation(180);
     this->setColor(Color3B(255,0,5));
     this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 1.2));
-    this->MovePlane(Vec2(0.0f, -1.0f));
 }
 void EnemyPlane::update(float delta)
 {
+	_behaviour->Behave(delta);
     applySpeed(delta);
     this->setRotation(180);
     
