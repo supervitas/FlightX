@@ -19,7 +19,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet() 
 {
-//	CCLOG("Bullet destroyed!");
+	//CCLOG("Bullet destroyed!");
 }
 
 Bullet*  Bullet::create(const DefaultPlane *plane)
@@ -46,16 +46,13 @@ float Bullet::GetRotation() const
 	return _currentSpeed.getAngle();
 }
 
-//void Bullet::buldelete() {
-//    
-//    removeFromParentAndCleanup(true);
-//    
-//}
 void Bullet::unscheduleUpdateAndDelete()
 {
 	// Obviously, we don't want all update() functions called after object was destroyed.
 	this->unscheduleUpdate();
 	removeFromParentAndCleanup(true);
+	//CCLOG("Bullet unscheduled!");
+	this->~Bullet();
 }
 
 void Bullet::applySpeed(float deltaTime)
@@ -69,12 +66,12 @@ void Bullet::applySpeed(float deltaTime)
 
 bool Bullet::isStillOnScreen()
 {
-    
 	auto boundings = getParent()->getBoundingBox();
-	auto bulletWillLeaveScreenOnNextFrame = boundings.intersectsCircle(getPosition(), 0);
+	bool bIsOnScreen = this->getPositionX() < boundings.getMaxX() && this->getPositionX() > boundings.getMinX() &&
+						this->getPositionY() < boundings.getMaxY() && this->getPositionY() > boundings.getMinY();
     
     // There may be some more complex logic.
-	return bulletWillLeaveScreenOnNextFrame;
+	return bIsOnScreen;
 }
 
 void Bullet::update(float delta)
@@ -139,6 +136,6 @@ void Bullet::addEvents()
 void Bullet::touchEvent(cocos2d::Touch* touch)
 {
     //CCLOG("Sprite touched");
-    CCLOG("%s", this->_isEnemyBullet? "Enemy bullet!" : "Keep calm, it's my bullet.");
+    //CCLOG("%s", this->_isEnemyBullet? "Enemy bullet!" : "Keep calm, it's my bullet.");
 
 }
