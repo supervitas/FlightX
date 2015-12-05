@@ -10,7 +10,6 @@ namespace
 	const int kBulletZIndex = 2;
     Label *scoreLabel;
     Label *playerHpLabel;
-    int bulcount = 0;
     Vector<EnemyPlane*> vectorEnemyPlanes;    
     
 };

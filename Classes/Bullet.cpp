@@ -81,8 +81,6 @@ void Bullet::update(float delta)
 	applySpeed(delta);
 	// If bullet is offscreen, destroy it.
 	if (!isStillOnScreen())
-		// There should not be any modifications to bullet beyond this point, otherwise you will probably try read 0xFEEEFF46.
-		// So, first update all the parameters, then check if bullets needs to be deleted. 
 		unscheduleUpdateAndDelete();
 	
 }

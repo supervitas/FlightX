@@ -23,6 +23,7 @@ public:
     void addEvents();
     void update(float delta) override;
     void randomMove(Vec2 coord);
+    bool isStillOnScreen();
 
 protected:
 	AbstractPlaneBehavoiur* _behaviour;

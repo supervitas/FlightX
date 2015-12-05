@@ -29,7 +29,6 @@ private:
 	void SetDefaultBackground();
     int score = 0;
     int playerHp = 100;
-//    Vector<Bullet*> bulletsMas;
 	DefaultPlane* _player_plane;
 
 };
