@@ -178,8 +178,7 @@ void GameScene::updateUI()
 	{
 		playerHpLabel->setString(std::to_string(_player_plane->GetCurrentHP()));
 		scoreLabel->setString(std::to_string(score));
-	}
-	else
+	} else
 		drawGameOver();
 }
 
@@ -208,7 +207,6 @@ void GameScene::drawGameOver()
 	game_over_label->runAction(RepeatForever::create(sca_seq));
 	game_over_label->runAction(RepeatForever::create(rot_seq));
 	this->addChild(game_over_label);
-
 
 
 	auto startGameButton = ui::Button::create();
