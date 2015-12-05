@@ -1,5 +1,5 @@
-#ifndef __BEHAVIOUR_H__
-#define __BEHAVIOUR_H__
+#ifndef __BEHAVIOR_H__
+#define __BEHAVIOR_H__
 
 #include "cocos2d.h"
 #include "Plane.h"
@@ -11,6 +11,7 @@ namespace DefaultValues
 	const float kDefaultShootCooldown = 1.0f; // 1 second
 }
 
+// TODO: fix a typo.
 class AbstractPlaneBehavoiur
 {
 public: 
