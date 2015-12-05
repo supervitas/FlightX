@@ -17,7 +17,7 @@ public:
         mWorld->setGravity(cocos2d::Vect(0,0));  // No gravity
     }
     cocos2d::PhysicsWorld* mWorld;
-    void update(float delta) override;
+
     static cocos2d::Scene* createScene();
     bool onContactBegin(cocos2d::PhysicsContact &contact);
     virtual bool init() override;
@@ -28,7 +28,8 @@ public:
 private:
 	void SetDefaultBackground();
     int score = 0;
-    Vector<Bullet*> bulletsMas;
+    int playerHp = 100;
+//    Vector<Bullet*> bulletsMas;
 	DefaultPlane* _player_plane;
 
 };

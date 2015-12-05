@@ -9,6 +9,7 @@ namespace
 	const int kPlaneZIndex = 1;
 	const int kBulletZIndex = 2;
     Label *scoreLabel;
+    Label *playerHpLabel;
     int bulcount = 0;
     Vector<EnemyPlane*> vectorEnemyPlanes;    
     
@@ -77,10 +78,8 @@ bool GameScene::init()
             case cocos2d::EventKeyboard::KeyCode::KEY_K:
                 {
 					EnemyPlane *en_plane = EnemyPlane::create(GetPlayerPlane());
-
                     this->addChild(en_plane);
                     vectorEnemyPlanes.pushBack(en_plane);
-                    
                     break;
 
                 }
@@ -89,13 +88,7 @@ bool GameScene::init()
 			case cocos2d::EventKeyboard::KeyCode::KEY_SPACE:
 			{
 				bullet = Bullet::create(GetPlayerPlane());
-                bullet->setTag(bulcount);
-                bulletsMas.insert(bulcount, bullet);
-                bulcount++;
-				this->addChild(bullet, kBulletZIndex);
-                if (bulcount > 40) {
-                    bulcount = 0;
-                }
+                this->addChild(bullet, kBulletZIndex);
 
 			}
             break;
@@ -144,27 +137,38 @@ DefaultPlane* GameScene::GetPlayerPlane()
 	return _player_plane;
 }
 
-bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact) {
+bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact)
+{
     PhysicsBody *a = contact.getShapeA()->getBody();
     PhysicsBody *b = contact.getShapeB()->getBody();
     if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask()))
     {
         ((EnemyPlane*) b->getNode())->ApplyDamage(100);
         ((DefaultPlane*) a->getNode())->ApplyDamage(100);
+        playerHpLabel->setString(std::to_string(0));
     }
-    if ((3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()))
+    
+    if (3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask())
     {
-            ((EnemyPlane*) b->getNode())->ApplyDamage(20);
+        ((EnemyPlane*) b->getNode())->ApplyDamage(20);
+        ((Bullet*) a->getNode())->unscheduleUpdateAndDelete();
         
-
-        for (int i = 0; i < bulletsMas.size(); i++) {
-            if (bulletsMas.at(i)->getTag() == a->getNode()->getTag()) {
-                bulletsMas.at(i)->unscheduleUpdateAndDelete();
-            }
-        }
-
         score++;
         scoreLabel->setString(std::to_string(score));
+//        for (int i = 0; i < bulletsMas.size(); i++)
+//        {
+//            if (bulletsMas.at(i)->getTag() == a->getNode()->getTag()) {
+//                bulletsMas.at(i)->unscheduleUpdateAndDelete();
+//            }
+//        }
+    }
+    
+    if (1 == b->getCollisionBitmask() && 4 == a->getCollisionBitmask())
+    {
+        ((DefaultPlane*) b->getNode())->ApplyDamage(10);
+         ((Bullet*) a->getNode())->unscheduleUpdateAndDelete();
+        playerHp -= 10;
+        playerHpLabel->setString(std::to_string(playerHp));
     }
     
     return true;
@@ -193,11 +197,18 @@ void GameScene::SetDefaultBackground()
     scoreLabel->setPosition(Vec2(origin.x + visibleSize.width-15,
                                  origin.y + visibleSize.height-10));
     this->addChild(scoreLabel, 0);
+    
+    auto hpLabel = Label::createWithTTF("fonts/arial.ttf", "Health:");
+    hpLabel->setColor(Color3B(255, 255 , 255));
+    hpLabel->setPosition(Vec2(origin.x + visibleSize.width / 20,
+                                origin.y + visibleSize.height - 10));
+    this->addChild(hpLabel);
+    
+    playerHpLabel = Label::create();
+    playerHpLabel->setString(std::to_string(playerHp));
+    playerHpLabel->setColor(Color3B(255, 0 , 0));
+    playerHpLabel->setPosition(Vec2(origin.x + visibleSize.width / 8,
+                                 origin.y + visibleSize.height - 10));
+    this->addChild(playerHpLabel, 0);
 }
 
-void GameScene::update(float delta)
-{
-    
-
-    
-}

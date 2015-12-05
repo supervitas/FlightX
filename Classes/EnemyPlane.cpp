@@ -70,8 +70,6 @@ void EnemyPlane::randomMove(Vec2 coord)
 {
     
 
-    
-
 }
 
 void EnemyPlane::addEvents() {

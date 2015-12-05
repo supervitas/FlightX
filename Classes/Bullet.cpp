@@ -92,6 +92,9 @@ void Bullet::initOptions(const DefaultPlane *plane)
 {
     auto bullet_body = PhysicsBody::createCircle(1,PhysicsMaterial(0,0,0));
     bullet_body->setCollisionBitmask(3);
+    if (plane->IsEnemy()) {
+        bullet_body->setCollisionBitmask(4);
+    }
     bullet_body->setContactTestBitmask(true);
     bullet_body->setDynamic(true);
     this->setPhysicsBody(bullet_body);
