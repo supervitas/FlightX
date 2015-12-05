@@ -14,9 +14,9 @@ public:
     void touchEvent(cocos2d::Touch* touch);
     void unscheduleUpdateAndDelete();
 	float GetRotation() const;
-    void buldelete();
-private:
+	int GetDamage();
 
+private:
 	Bullet();
 	~Bullet();
 
@@ -27,7 +27,7 @@ private:
 	
 
 private:
-	int _damadge;
+	int _damage;
     bool _isEnemyBullet; // Much better than owner_id. :)
 	float _max_speed;
 	Vec2 _currentSpeed;

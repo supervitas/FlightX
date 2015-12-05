@@ -6,6 +6,7 @@ USING_NS_CC;
 namespace
 {
 	static float kMaximumBulletSpeed = 200.0f;
+	static int kDefaultDamage = 10;
 	float DegreesToRadians(float degrees)
 	{
 		return degrees * (M_PI / 180);
@@ -20,6 +21,11 @@ Bullet::Bullet()
 Bullet::~Bullet() 
 {
 	//CCLOG("Bullet destroyed!");
+}
+
+int Bullet::GetDamage()
+{
+	return _damage;
 }
 
 Bullet*  Bullet::create(const DefaultPlane *plane)
@@ -53,8 +59,8 @@ void Bullet::unscheduleUpdateAndDelete()
 	removeFromParent();
 	
 	// TODO: Fix enemy bullets.
-	if (!this->_isEnemyBullet)
-		this->~Bullet();
+	//if (!this->_isEnemyBullet)
+	//	this->~Bullet();
 }
 
 void Bullet::applySpeed(float deltaTime)
@@ -98,13 +104,12 @@ void Bullet::initOptions(const DefaultPlane *plane)
     this->setPhysicsBody(bullet_body);
     this->setScale(0.2f);
 	setPosition(plane->getPosition());
+
 	_max_speed = kMaximumBulletSpeed;	// Should depend on bullet type.
+	_damage = kDefaultDamage;
 
 	_isEnemyBullet = plane->IsEnemy();
-	_isEnemyBullet ? this->setColor(Color3B(255, 0, 0)) : this->setColor(Color3B(0, 255, 0));
-	
-
-    
+	_isEnemyBullet ? this->setColor(Color3B(255, 0, 0)) : this->setColor(Color3B(0, 255, 0)); 
 	// I hate Maths.
 	_currentSpeed = Vec2(-1.0f, 0.0f).rotateByAngle(Vec2(), -DegreesToRadians(plane->getRotation() + 90)).getNormalized() * kMaximumBulletSpeed;
 }

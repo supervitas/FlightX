@@ -11,6 +11,7 @@ public:
     
 	bool IsEnemy() const;
 	void ApplyDamage(const int damage);
+	int	 GetCurrentHP();
 	void Shoot();
 
 	bool MovePlane(const Vec2 direction);

@@ -26,10 +26,18 @@ public:
 
     CREATE_FUNC(GameScene);
 private:
-	void SetDefaultBackground();
     int score = 0;
-    int playerHp = 100;
 	DefaultPlane* _player_plane;
+	Label *scoreLabel;
+	Label *playerHpLabel;
+	Vector<EnemyPlane*> vectorEnemyPlanes;
+
+private:
+	void setDefaultBackground();
+	void makeWorldPhysical();
+	void createUI();
+	void updateUI();
+	void drawGameOver();
 
 };
 

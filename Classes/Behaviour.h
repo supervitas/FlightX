@@ -8,7 +8,7 @@ USING_NS_CC;
 
 namespace DefaultValues
 {
-	const float kDefaultShootCooldown = 1.0f; // 1 second
+	const float kDefaultShootCooldown = 2.0f; // 1 second
 }
 
 // TODO: fix a typo.

@@ -33,6 +33,11 @@ DefaultPlane* DefaultPlane::create()
     return NULL;
 }
 
+int DefaultPlane::GetCurrentHP()
+{
+	return _currentHP;
+}
+
 void DefaultPlane::initOptions() 
 {
     auto plane_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,0,0));
