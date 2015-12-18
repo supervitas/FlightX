@@ -33,18 +33,22 @@ float AbstractPlaneBehavoiur::distanceToPlayer()
 	return vectorToPlayer().getLength();
 }
 
+
+
 Vec2 AbstractPlaneBehavoiur::vectorToPlayer()
 {
+    if (_player_plane->GetCurrentHP() > 0) {
 	return (_player_plane->getPosition() - _owner->getPosition());
+    } else {
+        return Vec2(0, -1);
+    }
+    
 }
 
 float AbstractPlaneBehavoiur::angleToPlayer()
 {
-	//return Vec2::angle(Vec2(1.0f, .0f), vectorToPlayer());
 	return vectorToPlayer().getAngle();
 }
-
-
 
 SimplePlaneBehaviour::SimplePlaneBehaviour(DefaultPlane* owner, DefaultPlane* player_plane) : AbstractPlaneBehavoiur(owner, player_plane)
 {
@@ -66,3 +70,21 @@ void SimplePlaneBehaviour::Behave(float deltaT)
 	}
 
 }
+
+KamikazePlaneBehaviour::KamikazePlaneBehaviour(DefaultPlane* owner, DefaultPlane* player_plane) : AbstractPlaneBehavoiur(owner, player_plane)
+{
+    _owner->setMaximumSpeed(110);
+    _owner->ApplyDamage(40);
+}
+
+void KamikazePlaneBehaviour::Behave(float deltaT)
+{
+    _owner->StopPlane();
+    
+    // Or move at player.
+    _owner->MovePlane(directionToPlayer());
+    
+    
+    
+}
+

@@ -5,21 +5,12 @@
 //  Created by Виталий on 21.11.15.
 //
 //
-
 #include "EnemyPlane.h"
 #include "Behaviour.h"
 #include "GameScene.h"
 USING_NS_CC;
-EnemyPlane::EnemyPlane(DefaultPlane* const player_plane)
-{
-	_behaviour = new SimplePlaneBehaviour(this, player_plane);
-}
-
-EnemyPlane::~EnemyPlane()
-{
-    CCLOG("des");
-    
-}
+EnemyPlane::EnemyPlane(DefaultPlane* const player_plane){}
+EnemyPlane::~EnemyPlane(){}
 
 EnemyPlane*  EnemyPlane::create(DefaultPlane* const player_plane)
 {
@@ -33,6 +24,8 @@ EnemyPlane*  EnemyPlane::create(DefaultPlane* const player_plane)
         
         pSprite->addEvents();
         
+        pSprite->ChangeBehavoiur(player_plane);
+        
         return pSprite;
     }
     CC_SAFE_DELETE(pSprite);
@@ -40,6 +33,22 @@ EnemyPlane*  EnemyPlane::create(DefaultPlane* const player_plane)
 
 }
 
+void EnemyPlane::ChangeBehavoiur(DefaultPlane* const player_plane, int type)
+{
+    switch (type)
+    {
+        case 0:
+            _behaviour = new SimplePlaneBehaviour(this, player_plane);
+            break;
+        
+        case 1:
+            _behaviour = new KamikazePlaneBehaviour(this, player_plane);
+            break;
+            
+        default:
+            break;
+    }
+}
 
 void EnemyPlane::initOptions()
 {
@@ -57,7 +66,7 @@ void EnemyPlane::initOptions()
     _movementDirection = Vec2();
     this->setRotation(180);
     this->setColor(Color3B(255,0,5));
-    this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 1.2));
+
 }
 void EnemyPlane::update(float delta)
 {
@@ -65,6 +74,7 @@ void EnemyPlane::update(float delta)
     applySpeed(delta);
     this->setRotation(180);
     if (!isStillOnScreen()) {
+        
         unscheduleUpdateAndDelete();
     }
     
@@ -73,9 +83,9 @@ bool EnemyPlane::isStillOnScreen()
 {
     auto boundings = getParent()->getBoundingBox();
     bool planeIsOnScreen = ( this->getPositionX()-10 < boundings.getMaxX() && this->getPositionX()-10 > boundings.getMinX() &&
-    this->getPositionY()-10 < boundings.getMaxY() && this->getPositionY()-10 > boundings.getMinY() );
+    this->getPositionY()-10 < boundings.getMaxY() && this->getPositionY()-10 > boundings.getMinY());
     
-    // There may be some more complex logic.
+    
     return planeIsOnScreen;
 }
 
@@ -87,24 +97,7 @@ void EnemyPlane::randomMove(Vec2 coord)
 }
 
 void EnemyPlane::addEvents() {
-    auto listener = cocos2d::EventListenerTouchOneByOne::create();
-    listener->setSwallowTouches(true);
-    
-    listener->onTouchBegan = [&](cocos2d::Touch* touch, cocos2d::Event* event) {
-        cocos2d::Vec2 p = touch->getLocation();
-        cocos2d::Rect rect = this->getBoundingBox();
-        if(rect.containsPoint(p)) {
-            return true; // to indicate that we have consumed it.
-        }
-        return false; // we did not consume this event, pass thru.
-    };
-    
-    listener->onTouchEnded = [=](cocos2d::Touch* touch, cocos2d::Event* event) {
-        touchEvent(touch);
-    };
-    
-    cocos2d::Director::getInstance()->getEventDispatcher()->addEventListenerWithFixedPriority(listener, 30);
-    
+
     scheduleUpdate();
 }
 

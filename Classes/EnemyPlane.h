@@ -24,6 +24,8 @@ public:
     void update(float delta) override;
     void randomMove(Vec2 coord);
     bool isStillOnScreen();
+    void ChangeBehavoiur(DefaultPlane* const player_plane, int type = 0);
+    
 
 protected:
 	AbstractPlaneBehavoiur* _behaviour;

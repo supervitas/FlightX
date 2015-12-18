@@ -28,6 +28,8 @@ public:
 	void applySpeed(float deltaTime);
 	void unscheduleUpdateAndDelete();
     void makeBoom();
+    
+    void setMaximumSpeed(float);
 protected:
     int _currentHP;
 	int _baseHP;

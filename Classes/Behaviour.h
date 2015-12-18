@@ -46,4 +46,12 @@ protected:
 	float _time_since_last_shot;
 };
 
+class KamikazePlaneBehaviour : public AbstractPlaneBehavoiur
+{
+public:
+    KamikazePlaneBehaviour(DefaultPlane* owner, DefaultPlane* player_plane);
+    void Behave(float deltaT) override;
+};
+
+
 #endif

@@ -6,9 +6,12 @@
 //
 //
 
-#include "Bonus.hpp"
+#include "Bonus.h"
+
 USING_NS_CC;
 
+Bonus::Bonus(){};
+Bonus::~Bonus(){};
 Bonus* Bonus::create()
 {
     Bonus* pSprite = new Bonus();
@@ -31,13 +34,15 @@ Bonus* Bonus::create()
 void Bonus::initOptions()
 {
     auto bonus_body = PhysicsBody::createBox(this->getContentSize(), PhysicsMaterial(0,0,0));
-    bonus_body->setCollisionBitmask(4);
+    bonus_body->setCollisionBitmask(8);
+
     bonus_body->setContactTestBitmask(true);
     bonus_body->setDynamic(true);// Физика
 //    this->setTag(2);
     this->setPhysicsBody(bonus_body);
-    this->setScale(0.5);
+    this->setScale(0.1);
 //    this->setRotation(180);
 //    this->setColor(Color3B(255,0,5));
-    this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 2));
+    this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / cocos2d::RandomHelper::random_int(1, 6), Director::getInstance()->getVisibleSize().height / cocos2d::RandomHelper::random_int(2, 6)));
+    
 }

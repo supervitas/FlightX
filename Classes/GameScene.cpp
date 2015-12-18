@@ -1,14 +1,21 @@
 #include "GameScene.h"
 #include "HelloWorldScene.h"
 #include "Bullet.h"
+#include "Bonus.h"
 
 
 USING_NS_CC;
 
 namespace 
 {
-	const int kPlaneZIndex = 10;
+	const int kPlaneZIndex = 1;
 	const int kBulletZIndex = 2;
+    const float kEnemySpawnDelay = 0.9f;
+    const float kBonusSpawnDelay = 6.f;
+    const int kMaxBonusCount = 2;
+    const int kDefaultBulletDamgeMultiplier = 4;
+    
+    
 };
 
 Scene* GameScene::createScene()
@@ -23,6 +30,27 @@ Scene* GameScene::createScene()
     return scene;
 }
 
+void GameScene::bonusCreate()
+{
+    
+    if (bonusCount < kMaxBonusCount )
+    {
+        bonusCount++;
+        Bonus* bon = Bonus::create();
+        this->addChild(bon, 1);
+    }
+}
+
+void GameScene::enemyCreate()
+{
+    int plane_type = cocos2d::RandomHelper::random_int(0, 3) == 0? 1 : 0;
+    EnemyPlane* en = factory->createPlane(plane_type);
+    
+    float x = 50.f + cocos2d::RandomHelper::random_int(0, int(Director::getInstance()->getVisibleSize().width - 100.f));
+    en->setPosition(x, Director::getInstance()->getVisibleSize().height - 50);
+    this->addChild(en, 1);
+}
+
 bool GameScene::init()
 {
     if (!Layer::init())
@@ -30,8 +58,6 @@ bool GameScene::init()
         return false;	
     }
 
-    
-    Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
 	_player_plane = DefaultPlane::create();
@@ -40,8 +66,11 @@ bool GameScene::init()
 	setDefaultBackground();
 	makeWorldPhysical();
 	createUI();
-   
-
+    bonusTimer = 0;
+    enemyTimer = 0;
+    bonusCount = 0;
+    factory = new EnemyPlaneFactory(GetPlayerPlane());
+    
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
@@ -132,27 +161,67 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact)
     PhysicsBody *b = contact.getShapeB()->getBody();
 	bool should_update_UI = false;
 
-    if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask()))
+    if ((1 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) || (2 == a->getCollisionBitmask() && 1 == b->getCollisionBitmask())) // столкновения нашего и вражеского самолета
     {
-		((EnemyPlane*) a->getNode())->ApplyDamage(((EnemyPlane*) a->getNode())->GetCurrentHP());
-        ((DefaultPlane*) b->getNode())->ApplyDamage(50);
-		should_update_UI = true;
+        if (a->getNode()->getTag() == 2)
+        {
+            ((EnemyPlane*) a->getNode())->ApplyDamage(100);
+            GetPlayerPlane()->ApplyDamage(50);
+            should_update_UI = true;
+        }
+        else {
+            GetPlayerPlane()->ApplyDamage(50);
+            ((EnemyPlane*) b->getNode())->ApplyDamage(100);
+            should_update_UI = true;
+        }
     }
     
-    if (3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask())
+    if (3 == a->getCollisionBitmask() && 2 == b->getCollisionBitmask()) // вражеский самолет и наша пуля
     {
-		((EnemyPlane*) b->getNode())->ApplyDamage(((Bullet*) a->getNode())->GetDamage());
+		((EnemyPlane*) b->getNode())->ApplyDamage(((Bullet*) a->getNode())->GetDamage()*kDefaultBulletDamgeMultiplier);
         ((Bullet*) a->getNode())->unscheduleUpdateAndDelete();
         
         score++;
 		should_update_UI = true;
     }
     
-    if (1 == b->getCollisionBitmask() && 4 == a->getCollisionBitmask())
+    if (1 == b->getCollisionBitmask() && 4 == a->getCollisionBitmask()) // вражеская пуля и наш самолет
     {
 		((DefaultPlane*) b->getNode())->ApplyDamage(((Bullet*) a->getNode())->GetDamage());
         ((Bullet*) a->getNode())->unscheduleUpdateAndDelete();
 		should_update_UI = true;
+    }
+    
+    
+    if (8 == a->getCollisionBitmask() || 8 == b->getCollisionBitmask() ) // бонусы и наш самолет
+    {
+        if (a->getCollisionBitmask() == 1)
+        {
+            b->getNode()->removeFromParent();
+            GetPlayerPlane()->ApplyDamage(-40);
+             bonusCount--;
+            should_update_UI = true;
+        }
+        if (b->getCollisionBitmask() == 1)
+        {
+            a->getNode()->removeFromParent();
+            GetPlayerPlane()->ApplyDamage(-40);
+             bonusCount--;
+            should_update_UI = true;
+        }
+        if (b->getCollisionBitmask() == 2)
+        {
+            a->getNode()->removeFromParent();
+            ((EnemyPlane*) b->getNode())->ApplyDamage(-20);
+             bonusCount--;
+        }
+        if (a->getCollisionBitmask() == 2)
+        {
+            b->getNode()->removeFromParent();
+            ((EnemyPlane*) a->getNode())->ApplyDamage(-20);
+            bonusCount--;
+            
+        }
     }
     
 	if (should_update_UI)
@@ -184,6 +253,7 @@ void GameScene::updateUI()
 
 void GameScene::drawGameOver()
 {
+    gameOver = true;
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -218,6 +288,7 @@ void GameScene::drawGameOver()
 		switch (type)
 		{
 		case ui::Widget::TouchEventType::ENDED:
+                gameOver = false;
 			Director::getInstance()->replaceScene(GameScene::createScene());
 			break;
 		default:
@@ -291,6 +362,27 @@ void GameScene::setDefaultBackground()
 	back->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     back->setScale(0.7);
 	this->addChild(back, 0);
+}
 
+void GameScene::update(float delta)
+{
+    if (gameOver == false)
+    {
+        
+    enemyTimer += delta;
+    bonusTimer += delta;
+    if (enemyTimer >= kEnemySpawnDelay)
+    {
+        enemyCreate();
+        
+        enemyTimer = 0;
+    }
+    if (bonusTimer >= kBonusSpawnDelay)
+    {
+        bonusCreate();
+        
+        bonusTimer = 0;
+    }
+    }
 }
 
