@@ -25,7 +25,12 @@ Bullet::~Bullet()
 
 int Bullet::GetDamage()
 {
-	return _damage;
+    if (this != NULL)
+    {
+        return _damage;
+    }
+    return NULL;
+    
 }
 
 Bullet*  Bullet::create(const DefaultPlane *plane)

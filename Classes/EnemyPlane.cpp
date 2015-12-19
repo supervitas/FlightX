@@ -16,7 +16,7 @@ EnemyPlane*  EnemyPlane::create(DefaultPlane* const player_plane)
 {
     EnemyPlane* pSprite = new EnemyPlane(player_plane);
     
-    if (pSprite->initWithFile("plane.png"))
+    if (pSprite->initWithFile("enemyplane.png"))
     {
         pSprite->autorelease();
         
@@ -65,7 +65,7 @@ void EnemyPlane::initOptions()
     _maximalSpeed = 50.0f;
     _movementDirection = Vec2();
     this->setRotation(180);
-    this->setColor(Color3B(255,0,5));
+//    this->setColor(Color3B(255,0,5));
 
 }
 void EnemyPlane::update(float delta)
@@ -82,10 +82,10 @@ void EnemyPlane::update(float delta)
 bool EnemyPlane::isStillOnScreen()
 {
     auto boundings = getParent()->getBoundingBox();
-    bool planeIsOnScreen = ( this->getPositionX()-10 < boundings.getMaxX() && this->getPositionX()-10 > boundings.getMinX() &&
-    this->getPositionY()-10 < boundings.getMaxY() && this->getPositionY()-10 > boundings.getMinY());
+    bool planeIsOnScreen = ( this->getPositionX()-17 < boundings.getMaxX() && this->getPositionX()-17 > boundings.getMinX() &&
+    this->getPositionY()-17 < boundings.getMaxY() && this->getPositionY()-17  > boundings.getMinY());
     
-    
+
     return planeIsOnScreen;
 }
 

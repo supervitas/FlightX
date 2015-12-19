@@ -14,8 +14,6 @@ namespace
     const float kBonusSpawnDelay = 6.f;
     const int kMaxBonusCount = 2;
     const int kDefaultBulletDamgeMultiplier = 4;
-    
-    
 };
 
 Scene* GameScene::createScene()
@@ -205,7 +203,7 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact)
         if (b->getCollisionBitmask() == 1)
         {
             a->getNode()->removeFromParent();
-            GetPlayerPlane()->ApplyDamage(-40);
+            GetPlayerPlane()->ApplyDamage(-30);
              bonusCount--;
             should_update_UI = true;
         }
@@ -234,7 +232,7 @@ void GameScene::makeWorldPhysical()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 2);
+	auto edgeBody = PhysicsBody::createEdgeBox(visibleSize, PHYSICSBODY_MATERIAL_DEFAULT, 10);
 	auto edgeNode = Node::create();
 	edgeNode->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	edgeNode->setPhysicsBody(edgeBody);
@@ -286,7 +284,7 @@ void GameScene::drawGameOver()
 	startGameButton->setColor(Color3B(0, 255, 0));
 	startGameButton->addTouchEventListener([&](Ref* sender, cocos2d::ui::Widget::TouchEventType type)
 	{
-		switch (type)
+		switch	 (type)
 		{
 		case ui::Widget::TouchEventType::ENDED:
                 gameOver = false;
@@ -358,10 +356,10 @@ void GameScene::setDefaultBackground()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto back = Sprite::create("sky.jpg");
+	auto back = Sprite::create("black_background.jpg");
 	back->setFlippedY(true);
 	back->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-//    back->setScale(0.7);
+    back->setScale(2);
 	this->addChild(back, 0);
 
     
