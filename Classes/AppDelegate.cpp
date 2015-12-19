@@ -76,12 +76,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     // create a scene. it's an autorelease object
-    auto scene2 = GameScene::createScene();
-//	auto scene1 = HelloWorld::createScene();
+//    auto scene2 = GameScene::createScene();
+	auto scene1 = HelloWorld::createScene();
 
     // run
-//    director->runWithScene(scene1);
-	director->replaceScene(scene2);
+    director->runWithScene(scene1);
+//	director->replaceScene(scene2);
 
     return true;
 }
