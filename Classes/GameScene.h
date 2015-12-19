@@ -39,6 +39,8 @@ private:
     int bonusCount;
     EnemyPlaneFactory* factory;
     
+  
+    
 private:
 	void setDefaultBackground();
 	void makeWorldPhysical();

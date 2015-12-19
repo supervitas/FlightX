@@ -248,6 +248,7 @@ void GameScene::updateUI()
 		playerHpLabel->setString(std::to_string(_player_plane->GetCurrentHP()));
 		scoreLabel->setString(std::to_string(score));
 	} else
+        if (gameOver == false)
 		drawGameOver();
 }
 
@@ -357,32 +358,32 @@ void GameScene::setDefaultBackground()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto back = Sprite::create("background.jpg");
+	auto back = Sprite::create("sky.jpg");
 	back->setFlippedY(true);
 	back->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-    back->setScale(0.7);
+//    back->setScale(0.7);
 	this->addChild(back, 0);
+
+    
 }
 
 void GameScene::update(float delta)
 {
     if (gameOver == false)
     {
-        
-    enemyTimer += delta;
-    bonusTimer += delta;
-    if (enemyTimer >= kEnemySpawnDelay)
-    {
-        enemyCreate();
-        
-        enemyTimer = 0;
-    }
-    if (bonusTimer >= kBonusSpawnDelay)
-    {
-        bonusCreate();
-        
-        bonusTimer = 0;
-    }
+        enemyTimer += delta;
+        bonusTimer += delta;
+        if (enemyTimer >= kEnemySpawnDelay)
+        {
+            enemyCreate();
+            enemyTimer = 0;
+        }
+            
+        if (bonusTimer >= kBonusSpawnDelay)
+        {
+            bonusCreate();
+            bonusTimer = 0;
+        }
     }
 }
 

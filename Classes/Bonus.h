@@ -20,12 +20,11 @@ public:
     static Bonus* create();
     void initOptions();
     void Spawn();
-
-//    void update(float delta);
+    
     bool isStillOnScreen();
     
-protected:
-//    AbstractPlaneBehavoiur* _behaviour;
+private:
+    bool lastBonusWasHP;
     
     
 };
