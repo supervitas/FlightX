@@ -356,17 +356,11 @@ void GameScene::setDefaultBackground()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-<<<<<<< HEAD
-	auto back = Sprite::create("background.jpg");
-	back->setFlippedY(true);
-	back->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-    back->setScale(0.7);
-=======
+
 	auto back = Sprite::create("black_background.jpg");
 	back->setFlippedY(true);
 	back->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     back->setScale(2);
->>>>>>> origin/master
 	this->addChild(back, 0);
 
 	for (int i = 0; i < 200; ++i)
@@ -377,6 +371,7 @@ void GameScene::setDefaultBackground()
 
 	for (int i = 0; i < 50; ++i)
 		back->addChild(Star::create(StarType::kNearStar), 1);
+	
     
 }
 
