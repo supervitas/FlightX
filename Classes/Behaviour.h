@@ -51,6 +51,8 @@ class KamikazePlaneBehaviour : public AbstractPlaneBehavoiur
 public:
     KamikazePlaneBehaviour(DefaultPlane* owner, DefaultPlane* player_plane);
     void Behave(float deltaT) override;
+private:
+	bool _already_fled_past_player;
 };
 
 

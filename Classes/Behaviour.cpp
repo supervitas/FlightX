@@ -75,14 +75,24 @@ KamikazePlaneBehaviour::KamikazePlaneBehaviour(DefaultPlane* owner, DefaultPlane
 {
     _owner->setMaximumSpeed(110);
     _owner->ApplyDamage(40);
+	_already_fled_past_player = false;
 }
 
 void KamikazePlaneBehaviour::Behave(float deltaT)
 {
-    _owner->StopPlane();
-    
-    // Or move at player.
-    _owner->MovePlane(directionToPlayer());
+	_owner->StopPlane();
+	if (!_already_fled_past_player)
+	{
+		// Or move at player.
+		_owner->MovePlane(directionToPlayer());
+
+		if (_owner->getPosition().y < _player_plane->getPosition().y)
+			_already_fled_past_player = true;
+	}
+	else
+	{
+		_owner->MovePlane(Vec2(.0f, -1.0f));
+	}
     
     
     
