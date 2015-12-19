@@ -163,7 +163,8 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact)
     {
         if (a->getNode()->getTag() == 2)
         {
-            ((EnemyPlane*) a->getNode())->ApplyDamage(100);
+            auto enemy_plane = dynamic_cast<EnemyPlane*>(a->getNode());
+            enemy_plane->ApplyDamage(100);
             GetPlayerPlane()->ApplyDamage(50);
             should_update_UI = true;
         }
@@ -171,6 +172,7 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact)
             GetPlayerPlane()->ApplyDamage(50);
             ((EnemyPlane*) b->getNode())->ApplyDamage(100);
             should_update_UI = true;
+
         }
     }
     
@@ -196,7 +198,7 @@ bool GameScene::onContactBegin(cocos2d::PhysicsContact& contact)
         if (a->getCollisionBitmask() == 1)
         {
             b->getNode()->removeFromParent();
-            GetPlayerPlane()->ApplyDamage(-40);
+            GetPlayerPlane()->ApplyDamage(-30);
              bonusCount--;
             should_update_UI = true;
         }
@@ -363,21 +365,21 @@ void GameScene::setDefaultBackground()
     back->setScale(2);
 	this->addChild(back, 0);
 
-	for (int i = 0; i < 200; ++i)
-		back->addChild(Star::create(), 1);
+	for (int i = 0; i < 750; ++i)
+		back->addChild(Star::create(), 10);
 
-	for (int i = 0; i < 150; ++i)
-		back->addChild(Star::create(StarType::kFarStar), 1);
+	for (int i = 0; i < 250; ++i)
+		back->addChild(Star::create(StarType::kFarStar), 10);
 
 	for (int i = 0; i < 50; ++i)
-		back->addChild(Star::create(StarType::kNearStar), 1);
+		back->addChild(Star::create(StarType::kNearStar), 10);
 	
     
 }
 
 void GameScene::update(float delta)
 {
-    if (gameOver == false)
+    if (!gameOver)
     {
         enemyTimer += delta;
         bonusTimer += delta;
