@@ -2,7 +2,7 @@
 #include "HelloWorldScene.h"
 #include "Bullet.h"
 #include "Bonus.h"
-
+#include "Star.h"
 
 USING_NS_CC;
 
@@ -358,12 +358,20 @@ void GameScene::setDefaultBackground()
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-	auto back = Sprite::create("sky.jpg");
+	auto back = Sprite::create("background.jpg");
 	back->setFlippedY(true);
 	back->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-//    back->setScale(0.7);
+    back->setScale(0.7);
 	this->addChild(back, 0);
 
+	for (int i = 0; i < 200; ++i)
+		back->addChild(Star::create(), 1);
+
+	for (int i = 0; i < 150; ++i)
+		back->addChild(Star::create(StarType::kFarStar), 1);
+
+	for (int i = 0; i < 50; ++i)
+		back->addChild(Star::create(StarType::kNearStar), 1);
     
 }
 
