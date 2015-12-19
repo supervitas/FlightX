@@ -24,6 +24,7 @@ EnemyPlane* EnemyPlaneFactory::createKamikazePlane()
 {
     EnemyPlane* new_plane = EnemyPlane::create(_player_plane);
     new_plane->ChangeBehavoiur(_player_plane, 1);
+    new_plane->setTexture(CCTextureCache::sharedTextureCache()->addImage("kamikaze.png"));
     return new_plane;
 }
 
