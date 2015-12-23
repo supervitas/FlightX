@@ -33,12 +33,12 @@ Star* Star::create(StarType type)
 	case kFarStar:
 		initialization_succeded = star->initWithFile("star.png");
 		speed = 40.0f;
-		scale = 0.1f;
+		scale = 0.15f;
 		break;
 	case kNearStar:
 		initialization_succeded = star->initWithFile("fast_star.png");
-		speed = 150.0f;
-		scale = 0.2f;
+		speed = 130.0f;
+		scale = 0.12f;
 		break;
 	default:
 		break;

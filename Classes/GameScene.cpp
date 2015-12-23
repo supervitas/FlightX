@@ -365,13 +365,13 @@ void GameScene::setDefaultBackground()
     back->setScale(2);
 	this->addChild(back, 0);
 
-	for (int i = 0; i < 750; ++i)
+	for (int i = 0; i < 1750; ++i)
 		back->addChild(Star::create(), 10);
 
 	for (int i = 0; i < 250; ++i)
 		back->addChild(Star::create(StarType::kFarStar), 10);
 
-	for (int i = 0; i < 50; ++i)
+	for (int i = 0; i < 15; ++i)
 		back->addChild(Star::create(StarType::kNearStar), 10);
 	
     

@@ -5,7 +5,10 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-enum StarType {kFarFarStar, kFarStar, kNearStar};
+enum StarType
+{
+    kFarFarStar, kFarStar, kNearStar
+};
 
 class Star : public cocos2d::Sprite
 {

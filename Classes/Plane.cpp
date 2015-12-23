@@ -18,7 +18,7 @@ DefaultPlane* DefaultPlane::create()
     DefaultPlane* pSprite = new DefaultPlane();
     
 
-    if (pSprite->initWithFile("plane.png"))
+    if (pSprite->initWithFile("playerjet.png"))
     {
         
         pSprite->initOptions();
@@ -47,7 +47,7 @@ void DefaultPlane::initOptions()
     plane_body->setContactTestBitmask(true);
     plane_body->setDynamic(true);
     this->setPhysicsBody(plane_body);
-    this->setScale(0.15);
+    this->setScale(0.75);
     this->setPosition(Vec2(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 8));
 	_isEnemy = kDefaultPlaneOwnerFlag;
 	_baseHP = kDefaultPlaneHP;

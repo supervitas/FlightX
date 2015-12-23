@@ -54,6 +54,7 @@ SimplePlaneBehaviour::SimplePlaneBehaviour(DefaultPlane* owner, DefaultPlane* pl
 {
 	// Reloading on spawn.
 	_time_since_last_shot = 0;
+
 }
 
 void SimplePlaneBehaviour::Behave(float deltaT)
@@ -73,8 +74,9 @@ void SimplePlaneBehaviour::Behave(float deltaT)
 
 KamikazePlaneBehaviour::KamikazePlaneBehaviour(DefaultPlane* owner, DefaultPlane* player_plane) : AbstractPlaneBehavoiur(owner, player_plane)
 {
-    _owner->setMaximumSpeed(110);
+    _owner->setMaximumSpeed(120);
     _owner->ApplyDamage(40);
+    _owner->setColor(Color3B(255,0,0));
 	_already_fled_past_player = false;
 }
 
@@ -88,9 +90,7 @@ void KamikazePlaneBehaviour::Behave(float deltaT)
 
 		if (_owner->getPosition().y < _player_plane->getPosition().y)
 			_already_fled_past_player = true;
-	}
-	else
-	{
+	} else {
 		_owner->MovePlane(Vec2(.0f, -1.0f));
 	}
     

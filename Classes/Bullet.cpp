@@ -37,7 +37,7 @@ Bullet*  Bullet::create(const DefaultPlane *plane)
 {
 	Bullet* bullet = new Bullet();
     
-	if (bullet->initWithFile("bullet.png"))
+	if (bullet->initWithFile("fast_star.png"))
     {
 		bullet->autorelease();
 		bullet->initOptions(plane);
@@ -104,10 +104,13 @@ void Bullet::initOptions(const DefaultPlane *plane)
     if (plane->IsEnemy()) {
         bullet_body->setCollisionBitmask(4);
     }
+    this->setScaleY(0.25);
+    this->setScaleX(0.5);
     bullet_body->setContactTestBitmask(true);
     bullet_body->setDynamic(true);
     this->setPhysicsBody(bullet_body);
-    this->setScale(0.2f);
+
+    
 	setPosition(plane->getPosition());
 
 	_max_speed = kMaximumBulletSpeed;	// Should depend on bullet type.

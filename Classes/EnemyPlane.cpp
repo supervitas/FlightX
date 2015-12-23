@@ -73,8 +73,8 @@ void EnemyPlane::update(float delta)
 	_behaviour->Behave(delta);
     applySpeed(delta);
     this->setRotation(180);
-    if (!isStillOnScreen()) {
-        
+    if (!isStillOnScreen())
+    {
         unscheduleUpdateAndDelete();
     }
     
@@ -82,21 +82,16 @@ void EnemyPlane::update(float delta)
 bool EnemyPlane::isStillOnScreen()
 {
     auto boundings = getParent()->getBoundingBox();
-    bool planeIsOnScreen = ( this->getPositionX()-17 < boundings.getMaxX() && this->getPositionX()-17 > boundings.getMinX() &&
-    this->getPositionY()-17 < boundings.getMaxY() && this->getPositionY()-17  > boundings.getMinY());
+    bool planeIsOnScreen = ( this->getPositionX()-19 < boundings.getMaxX() && this->getPositionX()-19 > boundings.getMinX() &&
+    this->getPositionY()-19 < boundings.getMaxY() && this->getPositionY()-19  > boundings.getMinY());
     
 
     return planeIsOnScreen;
 }
 
 
-void EnemyPlane::randomMove(Vec2 coord)
+void EnemyPlane::addEvents()
 {
-    
-
-}
-
-void EnemyPlane::addEvents() {
 
     scheduleUpdate();
 }
